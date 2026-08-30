@@ -126,7 +126,7 @@ export class GuideStore {
       total: required.length,
       percent,
       status: percent === 100 ? "ready" : "in_progress",
-      rewardStatus: this.state.reward.status,
+      readyPassStatus: this.state.readyPass.status,
     };
   }
 
@@ -156,14 +156,14 @@ export class GuideStore {
     return {
       experienceIntegration: {
         role: "OCHECK is the official, organizer-governed and sponsor-enabled integrator of the experience.",
-        replaces: "The participant reconciling scattered emails, chats, PDFs, maps, services, partner offers, and rewards.",
+        replaces: "The participant reconciling scattered emails, chats, PDFs, maps, services, partner offers, and achievement moments.",
         authority: this.state.guide.organizer,
         integratedLayers: [
           "official truth",
           "personal AI assistance",
           "verified progress",
           "optional sponsored utility",
-          "result-based reward",
+          "shareable verified achievement",
         ],
       },
       outcome: this.state.guide.outcome,
@@ -180,7 +180,7 @@ export class GuideStore {
       readiness,
       progress: this.progress(),
       personalPlan: clone(this.state.personalPlan),
-      reward: clone(this.state.reward),
+      readyPass: clone(this.state.readyPass),
       guideVersion: this.state.guide.version,
     };
   }
@@ -242,8 +242,8 @@ export class GuideStore {
         issues.push({ severity: phase === "before" ? "error" : "warning", field: "actions", message: `The guide has no ${phase} actions.` });
       }
     }
-    if (!draft.reward?.title || !draft.reward?.unlockRule || !draft.reward?.benefit) {
-      issues.push({ severity: "error", field: "reward", message: "The result needs a named reward, unlock rule, and user benefit." });
+    if (!draft.readyPass?.title || !draft.readyPass?.unlockRule || !draft.readyPass?.benefit) {
+      issues.push({ severity: "error", field: "readyPass", message: "The experience needs a named Ready Pass, verified unlock rule, and participant benefit." });
     }
     for (const question of draft.openQuestions || []) {
       if (String(question).trim()) issues.push({ severity: "warning", field: "openQuestions", message: String(question).trim() });
@@ -265,7 +265,7 @@ export class GuideStore {
   validateOfficialGuide() {
     return this.validateDraft({
       ...this.state.guide,
-      reward: this.state.reward,
+      readyPass: this.state.readyPass,
       openQuestions: [],
     });
   }
@@ -284,11 +284,11 @@ export class GuideStore {
       actions: Array.isArray(input.actions) ? input.actions.map((action, index) => normalizeAction(action, index, seenIds)) : [],
       assumptions: Array.isArray(input.assumptions) ? input.assumptions.map(String).filter(Boolean) : [],
       openQuestions: Array.isArray(input.openQuestions) ? input.openQuestions.map(String).filter(Boolean) : [],
-      reward: {
-        title: String(input.reward?.title || "").trim(),
-        unlockRule: String(input.reward?.unlockRule || "").trim(),
-        benefit: String(input.reward?.benefit || "").trim(),
-        sponsor: String(input.reward?.sponsor || "").trim(),
+      readyPass: {
+        title: String(input.readyPass?.title || "").trim(),
+        unlockRule: String(input.readyPass?.unlockRule || "").trim(),
+        benefit: String(input.readyPass?.benefit || "").trim(),
+        sponsor: String(input.readyPass?.sponsor || "").trim(),
       },
       stagedAt: new Date().toISOString(),
       generatedFromBriefId: this.state.brief.id,
@@ -326,18 +326,18 @@ export class GuideStore {
       this.state.completedActionIds = draft.actions.filter((action) => previousCompleted.has(action.id)).map((action) => action.id);
       this.state.personalPlan = [];
       this.state.sponsorEngagements = [];
-      this.state.reward = {
+      this.state.readyPass = {
         id: `ready-pass-${slugify(draft.title)}`,
-        title: draft.reward.title,
+        title: draft.readyPass.title,
         status: "locked",
-        unlockRule: draft.reward.unlockRule,
-        benefit: draft.reward.benefit,
-        sponsor: draft.reward.sponsor,
+        unlockRule: draft.readyPass.unlockRule,
+        benefit: draft.readyPass.benefit,
+        sponsor: draft.readyPass.sponsor,
         code: null,
         referralCode: null,
         claimedAt: null,
       };
-      if (this.readiness().percent === 100) this.state.reward.status = "available";
+      if (this.readiness().percent === 100) this.state.readyPass.status = "available";
       return {
         status: "published",
         version: this.state.guide.version,
@@ -393,15 +393,15 @@ export class GuideStore {
       return { status: "already_completed", actionId, progress: this.progress(), readiness: this.readiness() };
     }
 
-    const rewardWasLocked = this.state.reward.status === "locked";
+    const readyPassWasLocked = this.state.readyPass.status === "locked";
     return this.mutate("action_completed", `Completed “${action.title}”`, () => {
       this.state.completedActionIds.push(actionId);
       const readiness = this.readiness();
-      let rewardUnlocked = false;
-      if (rewardWasLocked && readiness.percent === 100) {
-        this.state.reward.status = "available";
+      let readyPassUnlocked = false;
+      if (readyPassWasLocked && readiness.percent === 100) {
+        this.state.readyPass.status = "available";
         this.state.impact.readyPasses += 1;
-        rewardUnlocked = true;
+        readyPassUnlocked = true;
       }
       return {
         status: "completed",
@@ -409,8 +409,8 @@ export class GuideStore {
         title: action.title,
         progress: this.progress(),
         readiness: this.readiness(),
-        rewardUnlocked,
-        reward: clone(this.state.reward),
+        readyPassUnlocked,
+        readyPass: clone(this.state.readyPass),
       };
     });
   }
@@ -438,21 +438,21 @@ export class GuideStore {
     });
   }
 
-  claimReadinessReward() {
-    if (this.state.reward.status === "locked") {
+  claimReadyPass() {
+    if (this.state.readyPass.status === "locked") {
       throw new Error("Complete every required Before action before claiming the Ready Pass.");
     }
-    if (this.state.reward.status === "claimed") {
-      return { status: "already_claimed", reward: clone(this.state.reward) };
+    if (this.state.readyPass.status === "claimed") {
+      return { status: "already_claimed", readyPass: clone(this.state.readyPass) };
     }
-    return this.mutate("readiness_reward_claimed", `Claimed “${this.state.reward.title}”`, () => {
-      this.state.reward.status = "claimed";
-      this.state.reward.code = "READY-5150-DEMO";
-      this.state.reward.referralCode = "ready-coastal-5150";
-      this.state.reward.claimedAt = new Date().toISOString();
+    return this.mutate("ready_pass_claimed", `Claimed “${this.state.readyPass.title}”`, () => {
+      this.state.readyPass.status = "claimed";
+      this.state.readyPass.code = "READY-5150-DEMO";
+      this.state.readyPass.referralCode = "ready-coastal-5150";
+      this.state.readyPass.claimedAt = new Date().toISOString();
       return {
         status: "claimed",
-        reward: clone(this.state.reward),
+        readyPass: clone(this.state.readyPass),
         referralPath: "/?ref=ready-coastal-5150&utm_source=ocheck_ready_pass",
         createsNewRecipientState: true,
       };
@@ -465,13 +465,13 @@ export class GuideStore {
     const sponsorOpenRate = percent(impact.sponsorActionOpens, impact.sponsorImpressions);
     const sponsorActivationRate = percent(impact.sponsorActivations, impact.sponsorActionOpens);
     const verifiedIntentRate = percent(impact.sponsorActivations, impact.sponsorImpressions);
-    const rewardReferralRate = percent(impact.referredStarts, impact.rewardShares);
+    const readyPassReferralRate = percent(impact.referredStarts, impact.readyPassShares);
     return {
       ...impact,
       officialIntegration: {
         before: "Customer as accidental integrator of fragmented touchpoints.",
         after: "OCHECK as the official, organizer-governed and sponsor-enabled experience integrator.",
-        sourceTypes: ["email", "chat", "PDF", "map", "service", "partner offer", "reward"],
+        sourceTypes: ["email", "chat", "PDF", "map", "service", "partner offer", "achievement moment"],
         governedBy: this.state.guide.organizer,
         integratedActors: ["organizer", "participant", "AI agent", "authorized partner"],
       },
@@ -479,17 +479,17 @@ export class GuideStore {
       sponsorOpenRate,
       sponsorActivationRate,
       verifiedIntentRate,
-      rewardReferralRate,
+      readyPassReferralRate,
       hooks: {
         customerExperience: {
-          promise: "One official source integrates rules, timing, personal assistance, verified progress, useful optional value, and an earned prize so the customer does not have to.",
-          currentRewardStatus: this.state.reward.status,
+          promise: "One official source integrates rules, timing, personal assistance, verified progress, useful optional value, and shareable achievement so the customer does not have to.",
+          currentReadyPassStatus: this.state.readyPass.status,
         },
         eventVirality: {
           mechanism: "Verified readiness → shareable Ready Pass → clean referred guide start.",
-          rewardShares: impact.rewardShares,
+          readyPassShares: impact.readyPassShares,
           cleanReferredStarts: impact.referredStarts,
-          shareToStartRate: rewardReferralRate,
+          shareToStartRate: readyPassReferralRate,
         },
         sponsorAccuracy: {
           mechanism: "Contextual need → disclosed offer open → explicit opt-in.",
@@ -498,9 +498,10 @@ export class GuideStore {
           verifiedIntentRate,
           signalBasis: ["need-matched action open", "explicit benefit activation"],
           accuracyPrinciple: "Real contextual actions support a more accurate understanding of customer intent than impressions alone; this demo does not claim demographic or predictive accuracy.",
+          privacyBoundary: "Metrics are aggregated and non-identifying. Partners receive no participant identity, contact data, or personal progress.",
         },
       },
-      disclosure: "All dashboard figures are synthetic challenge data.",
+      disclosure: "All dashboard figures are synthetic challenge data. This demo requires no participant account and exposes only aggregate, non-identifying sponsor metrics.",
       currentDemoEngagements: clone(this.state.sponsorEngagements),
     };
   }
@@ -523,7 +524,7 @@ export class GuideStore {
       summary: entry.summary,
       progress: this.progress(),
       readiness: this.readiness(),
-      reward: clone(this.state.reward),
+      readyPass: clone(this.state.readyPass),
     };
   }
 

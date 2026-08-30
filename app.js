@@ -156,11 +156,11 @@ function renderPersonalPlan(state) {
 function renderPrompts() {
   const participantPrompts = [
     "Read my OCHECK outcome state. First explain what scattered information, services, and actors OCHECK integrated so I do not have to. I have 25 minutes, this is my first event, and I prefer concise, low-impact guidance. Create a personal plan without changing official truth.",
-    "Show my remaining critical preparation actions. Complete the bicycle safety check only after I confirm; if that makes me ready, explain the prize, its clean referral, and how sharing helps the event grow before claiming it.",
-    "Show the optional sponsored opportunity inside my official experience, explain why it is relevant, its disclosure and terms, and activate it only after I confirm. Explain the high-intent signal created without marking any official action complete.",
+    "Show my remaining critical preparation actions. Complete the bicycle safety check only after I confirm; if that makes me ready, explain the Ready Pass, its clean referral, and how sharing the achievement helps the event grow before claiming it.",
+    "Show the optional sponsored opportunity inside my official experience, explain why it is relevant, its disclosure and terms, and activate it only after I confirm. Explain the aggregate, non-identifying high-intent signal created without marking any official action complete or exposing my identity, contact data, or personal progress.",
   ];
   const organizerPrompts = [
-    "Read the current organizer brief. First identify every fragmented touchpoint, source, actor, service, and burden currently integrated by the customer. Then design OCHECK as the organizer-governed official and sponsor-enabled integration layer: one outcome contract with a clear result, definition of done, sequenced actions, completion evidence, sources, assumptions, open questions, one optional disclosed sponsor opportunity, and a share-worthy result-based prize. Keep two ethical growth hooks inside that official experience: verified prize sharing for event virality and contextual opt-in signals for sponsor accuracy. Stage the draft but do not publish.",
+    "Read the current organizer brief. First identify every fragmented touchpoint, source, actor, service, and burden currently integrated by the customer. Then design OCHECK as the organizer-governed official and sponsor-enabled integration layer: one outcome contract with a clear result, definition of done, sequenced actions, completion evidence, sources, assumptions, open questions, one optional disclosed sponsor opportunity, and a shareable Ready Pass. Keep two ethical growth hooks inside that official experience: satisfaction-led achievement sharing for event reach and aggregate contextual opt-in signals for sponsor insight without identifying participants. Stage the draft but do not publish.",
     "Validate the staged guide. Explain every blocking issue and open question without changing the draft.",
     "If validation passes, show me exactly what will become official and publish only after my explicit confirmation.",
   ];
@@ -202,26 +202,26 @@ function renderParticipant(state) {
     && action.required
     && !state.completedActionIds.includes(action.id)
   )).length;
-  $("#reward-teaser-benefit").textContent = state.reward.status === "claimed"
-    ? "Prize claimed · your clean referral can invite the next participant without sharing your progress."
-    : state.reward.status === "available"
-      ? `Unlocked · ${state.reward.benefit}`
-      : `${remainingPreparation} required preparation ${remainingPreparation === 1 ? "check" : "checks"} left · ${state.reward.benefit}`;
-  $("#preview-reward").textContent = state.reward.status === "claimed"
+  $("#reward-teaser-benefit").textContent = state.readyPass.status === "claimed"
+    ? "Achievement claimed · your clean referral can invite the next participant without sharing your progress."
+    : state.readyPass.status === "available"
+      ? `Unlocked · ${state.readyPass.benefit}`
+      : `${remainingPreparation} required preparation ${remainingPreparation === 1 ? "check" : "checks"} left · ${state.readyPass.benefit}`;
+  $("#preview-reward").textContent = state.readyPass.status === "claimed"
     ? "View Ready Pass"
-    : state.reward.status === "available"
-      ? "Claim prize"
-      : "Preview prize";
+    : state.readyPass.status === "available"
+      ? "Claim Ready Pass"
+      : "Preview Ready Pass";
 
   const rewardChip = $("#reward-chip");
-  rewardChip.className = `reward-chip ${state.reward.status}`;
-  rewardChip.textContent = state.reward.status === "claimed"
+  rewardChip.className = `reward-chip ${state.readyPass.status}`;
+  rewardChip.textContent = state.readyPass.status === "claimed"
     ? "Ready Pass · Claimed"
-    : state.reward.status === "available"
+    : state.readyPass.status === "available"
       ? "Ready Pass · Unlocked"
       : "Ready Pass · Locked";
-  $("#ready-banner").hidden = state.reward.status === "locked";
-  $("#ready-banner-title").textContent = state.reward.status === "claimed"
+  $("#ready-banner").hidden = state.readyPass.status === "locked";
+  $("#ready-banner-title").textContent = state.readyPass.status === "claimed"
     ? "Your verified Ready Pass has been claimed."
     : "Your OCHECK Ready Pass is available.";
 
@@ -275,7 +275,7 @@ function renderDraft(state) {
       </header>
       <div class="draft-integration">
         <span>Official integration layer</span>
-        <strong>Organizer-approved truth, participant guidance, authorized partner value, and result-based reward become one governed experience.</strong>
+        <strong>Organizer-approved truth, participant guidance, authorized partner value, and shareable achievement become one governed experience.</strong>
       </div>
       <div class="draft-definition">
         <span>Definition of done</span>
@@ -293,9 +293,9 @@ function renderDraft(state) {
           </div>`).join("")}
       </div>
       <div class="draft-reward">
-        <span>Prize + event virality hook</span>
-        <strong>${escapeHtml(draft.reward.title)} · ${escapeHtml(draft.reward.unlockRule)}</strong>
-        <small>${escapeHtml(draft.reward.benefit)} · A clean referral turns verified achievement into organic reach.</small>
+        <span>Satisfaction + event reach hook</span>
+        <strong>${escapeHtml(draft.readyPass.title)} · ${escapeHtml(draft.readyPass.unlockRule)}</strong>
+        <small>${escapeHtml(draft.readyPass.benefit)} · A clean referral turns verified achievement into organic reach.</small>
       </div>
       <div class="draft-questions">
         <span>Open loops</span>
@@ -309,35 +309,35 @@ function renderImpact() {
   $("#metric-readiness").textContent = `${impact.readinessRate}%`;
   $("#metric-sponsor-open").textContent = `${impact.sponsorOpenRate}%`;
   $("#metric-sponsor-activation").textContent = `${impact.sponsorActivationRate}%`;
-  $("#metric-referral").textContent = `${impact.rewardReferralRate}%`;
+  $("#metric-referral").textContent = `${impact.readyPassReferralRate}%`;
   $("#impact-impressions").textContent = formatNumber(impact.sponsorImpressions);
   $("#impact-opens").textContent = formatNumber(impact.sponsorActionOpens);
   $("#impact-activations").textContent = formatNumber(impact.sponsorActivations);
   $("#impact-intent-signals").textContent = formatNumber(impact.hooks.sponsorAccuracy.verifiedIntentSignals);
-  $("#impact-shares").textContent = formatNumber(impact.rewardShares);
+  $("#impact-shares").textContent = formatNumber(impact.readyPassShares);
   $("#impact-referrals").textContent = formatNumber(impact.referredStarts);
 }
 
-function renderReward(state) {
-  const reward = state.reward;
-  $("#reward-state").textContent = titleCase(reward.status);
-  $("#reward-title").textContent = reward.title;
-  $("#reward-benefit").textContent = reward.benefit;
+function renderReadyPass(state) {
+  const readyPass = state.readyPass;
+  $("#reward-state").textContent = titleCase(readyPass.status);
+  $("#reward-title").textContent = readyPass.title;
+  $("#reward-benefit").textContent = readyPass.benefit;
   $("#ready-pass-title").textContent = `I AM READY FOR ${state.guide.title.replace(/—.*$/, "").trim().toUpperCase()}`;
   $("#ready-pass-meta").textContent = `${state.guide.eventDate} · ${state.guide.location}`;
-  $("#ready-pass-code").textContent = reward.status === "claimed"
-    ? `Verified code · ${reward.code}`
-    : reward.status === "available"
+  $("#ready-pass-code").textContent = readyPass.status === "claimed"
+    ? `Verified code · ${readyPass.code}`
+    : readyPass.status === "available"
       ? "Unlocked · Claim after human confirmation"
-      : reward.unlockRule;
+      : readyPass.unlockRule;
   const claim = $("#claim-reward");
-  claim.disabled = reward.status !== "available";
-  claim.textContent = reward.status === "claimed"
+  claim.disabled = readyPass.status !== "available";
+  claim.textContent = readyPass.status === "claimed"
     ? "Ready Pass claimed"
-    : reward.status === "available"
+    : readyPass.status === "available"
       ? "Claim Ready Pass"
       : "Complete preparation to earn your Ready Pass";
-  $("#copy-ready-pass").hidden = reward.status !== "claimed";
+  $("#copy-ready-pass").hidden = readyPass.status !== "claimed";
 }
 
 function render(state) {
@@ -348,7 +348,7 @@ function render(state) {
   renderParticipant(state);
   renderDraft(state);
   renderImpact();
-  renderReward(state);
+  renderReadyPass(state);
 
   const briefInput = $("#creation-brief");
   if (document.activeElement !== briefInput && briefInput.value !== state.brief.raw) {
@@ -409,13 +409,13 @@ function closeAction() {
   activeActionId = null;
 }
 
-function openReward() {
-  renderReward(store.getState());
+function openReadyPass() {
+  renderReadyPass(store.getState());
   rewardModal.hidden = false;
   $("#reward-close").focus();
 }
 
-function closeReward() {
+function closeReadyPass() {
   rewardModal.hidden = true;
 }
 
@@ -431,12 +431,12 @@ async function completeFromInterface(actionId) {
   });
   if (!approved) return;
   const result = store.completeAction(actionId);
-  showToast(result.rewardUnlocked
-    ? "Progress verified. The prize is unlocked—and the event virality hook is ready to share."
+  showToast(result.readyPassUnlocked
+    ? "Progress verified. Your Ready Pass is unlocked—and the satisfaction hook is ready to share."
     : "Progress verified and added to the audit trail.");
-  if (result.rewardUnlocked) {
+  if (result.readyPassUnlocked) {
     closeAction();
-    openReward();
+    openReadyPass();
   } else if (!actionModal.hidden) {
     openAction(actionId);
   }
@@ -473,7 +473,7 @@ confirmationModal.addEventListener("click", (event) => {
 document.addEventListener("keydown", (event) => {
   if (event.key !== "Escape") return;
   if (pendingConfirmation) closeConfirmation(false);
-  else if (!rewardModal.hidden) closeReward();
+  else if (!rewardModal.hidden) closeReadyPass();
   else if (!actionModal.hidden) closeAction();
 });
 
@@ -504,7 +504,7 @@ $("#action-list").addEventListener("click", (event) => {
 $("#guide-next").addEventListener("click", () => {
   const next = store.outcomeState().nextBestAction;
   if (next) openAction(next.id);
-  else openReward();
+  else openReadyPass();
 });
 
 $("#action-close").addEventListener("click", closeAction);
@@ -519,39 +519,39 @@ $("#activate-sponsor").addEventListener("click", () => {
   if (activeActionId) activateSponsorFromInterface(activeActionId);
 });
 
-$("#reward-chip").addEventListener("click", openReward);
-$("#preview-reward").addEventListener("click", openReward);
-$("#open-reward").addEventListener("click", openReward);
-$("#reward-close").addEventListener("click", closeReward);
+$("#reward-chip").addEventListener("click", openReadyPass);
+$("#preview-reward").addEventListener("click", openReadyPass);
+$("#open-reward").addEventListener("click", openReadyPass);
+$("#reward-close").addEventListener("click", closeReadyPass);
 rewardModal.addEventListener("click", (event) => {
-  if (event.target === rewardModal) closeReward();
+  if (event.target === rewardModal) closeReadyPass();
 });
 $("#claim-reward").addEventListener("click", async () => {
   const state = store.getState();
-  if (state.reward.status !== "available") {
-    showToast(state.reward.status === "claimed" ? "This Ready Pass is already claimed." : "Complete every required Before action to unlock this reward.");
+  if (state.readyPass.status !== "available") {
+    showToast(state.readyPass.status === "claimed" ? "This Ready Pass is already claimed." : "Complete every required Before action to unlock your Ready Pass.");
     return;
   }
   const approved = await confirmAction({
     eyebrow: "Verified result · Human confirmation",
-    title: `Claim “${state.reward.title}”?`,
+    title: `Claim “${state.readyPass.title}”?`,
     summary: "Create the shareable Ready Pass and a clean referral path. No purchase is made.",
-    details: { readiness: store.readiness(), reward: state.reward, purchaseMade: false },
+    details: { readiness: store.readiness(), readyPass: state.readyPass, purchaseMade: false },
     confirmLabel: "Claim Ready Pass",
   });
   if (!approved) return;
-  store.claimReadinessReward();
+  store.claimReadyPass();
   showToast("Ready Pass claimed. Your achievement can now create organic event reach through a clean referral.");
-  openReward();
+  openReadyPass();
 });
 
 $("#copy-ready-pass").addEventListener("click", async () => {
   const state = store.getState();
-  if (state.reward.status !== "claimed") return;
+  if (state.readyPass.status !== "claimed") return;
   const url = new URL(location.href);
   url.search = "";
   url.hash = "";
-  url.searchParams.set("ref", state.reward.referralCode);
+  url.searchParams.set("ref", state.readyPass.referralCode);
   url.searchParams.set("utm_source", "ocheck_ready_pass");
   url.searchParams.set("utm_medium", "share");
   await copyText(url.toString(), "Clean Ready Pass referral link copied.");
@@ -592,7 +592,7 @@ $("#stage-demo-draft").addEventListener("click", async () => {
       title: sampleGeneratedDraft.title,
       outcome: sampleGeneratedDraft.outcome,
       actions: sampleGeneratedDraft.actions.map((action) => ({ title: action.title, phase: action.phase, sponsored: Boolean(action.sponsored) })),
-      reward: sampleGeneratedDraft.reward,
+      readyPass: sampleGeneratedDraft.readyPass,
     },
     confirmLabel: "Stage demo draft",
   });
@@ -646,7 +646,7 @@ $("#reset-demo").addEventListener("click", async () => {
   const approved = await confirmAction({
     eyebrow: "Repeatable judging",
     title: "Reset the complete demonstration?",
-    summary: "Restore the synthetic brief, official guide, progress, partner funnel, reward, and audit baseline.",
+    summary: "Restore the synthetic brief, official guide, progress, partner funnel, Ready Pass, and audit baseline.",
     details: { resetsOnlySyntheticDemoState: true },
     confirmLabel: "Reset demo",
     danger: true,
@@ -657,7 +657,7 @@ $("#reset-demo").addEventListener("click", async () => {
     button.setAttribute("aria-selected", String(button.dataset.phase === "all"));
   }
   closeAction();
-  closeReward();
+  closeReadyPass();
   store.reset();
   showToast("The complete OCHECK official-experience demonstration was reset.");
 });
@@ -670,12 +670,12 @@ for (const root of [$("#participant-prompts"), $("#organizer-prompts")]) {
 }
 
 $("#copy-organizer-prompt").addEventListener("click", () => copyText(
-  "Read the current organizer brief with get_creation_brief. Identify the fragmented sources, actors, services, and customer self-integration burden. Convert them into OCHECK as the organizer-governed official and sponsor-enabled integration layer: one explicit result, a definition of done, sequenced Before/During/After actions, observable completion evidence, source traceability, assumptions, open questions, one optional and clearly disclosed sponsor opportunity that is never required, and a share-worthy result-based prize. Design an ethical dual hook inside that official experience: verified prize sharing for event virality and contextual opt-in signals for more accurate sponsor audience intelligence. Stage it with stage_ai_guide_draft, then validate it. Do not publish until I explicitly confirm.",
+  "Read the current organizer brief with get_creation_brief. Identify the fragmented sources, actors, services, and customer self-integration burden. Convert them into OCHECK as the organizer-governed official and sponsor-enabled integration layer: one explicit result, a definition of done, sequenced Before/During/After actions, observable completion evidence, source traceability, assumptions, open questions, one optional and clearly disclosed sponsor opportunity that is never required, and a shareable Ready Pass. Design an ethical dual hook inside that official experience: satisfaction-led achievement sharing for event reach and aggregate contextual opt-in signals for more accurate sponsor audience understanding without exposing participant identity, contact data, or personal progress. Stage it with stage_ai_guide_draft, then validate it. Do not publish until I explicitly confirm.",
   "AI guide-creation prompt copied.",
 ));
 
 $("#copy-demo-prompt").addEventListener("click", () => copyText(
-  "Work with the OCHECK page using its Site Tools and the same visible state. First explain how the customer currently integrates a fragmented experience. In Organizer + AI mode, read the scattered brief and stage OCHECK as the organizer-governed official and sponsor-enabled integration layer, including a share-worthy prize hook for event virality and an optional contextual sponsor hook for high-intent audience signals. Validate it and publish only after my confirmation. Then, in Participant mode, show the unified official experience, create a 25-minute personal plan without changing official truth, verify the last critical preparation action after my confirmation, explain and claim the unlocked Ready Pass only after I approve, and show how its clean referral creates organic reach. Show the disclosed sponsor value without making it mandatory, then read commercial impact and distinguish official integration, impressions, contextual interest, explicit opt-ins, shares, and referred starts. Never skip a confirmation.",
+  "Work with the OCHECK page using its Site Tools and the same visible state. First explain how the customer currently integrates a fragmented experience. In Organizer + AI mode, read the scattered brief and stage OCHECK as the organizer-governed official and sponsor-enabled integration layer, including a satisfaction hook built around a shareable Ready Pass and an optional contextual sponsor hook based only on aggregate, non-identifying intent signals. Validate it and publish only after my confirmation. Then, in Participant mode, show the unified official experience, create a 25-minute personal plan without changing official truth, verify the last critical preparation action after my confirmation, explain and claim the unlocked Ready Pass only after I approve, and show how its clean referral creates organic reach without transferring progress. Show the disclosed sponsor value without making it mandatory, then read commercial impact and distinguish official integration, impressions, contextual interest, explicit opt-ins, shares, and referred starts. Never expose participant identity, contact data, or personal progress to partners, and never skip a confirmation.",
   "Complete end-to-end demo prompt copied.",
 ));
 

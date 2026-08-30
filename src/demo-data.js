@@ -1,7 +1,7 @@
 export const creationBrief = {
   id: "brief-coastal-5150",
   label: "Organizer notes · synthetic challenge scenario",
-  raw: `We currently send registration by email, operational updates through WhatsApp, safety rules in a PDF, maps on another page, and partner offers separately. Participants are forced to assemble the experience themselves. We are organizing the Coastal 5150 on September 12 at Harbor Park, and we want OCHECK to become the organizer-governed, official and sponsor-enabled integration layer for the whole journey. Most participants are first-timers, so the experience must feel clear, encouraging, and personal. They must confirm registration and emergency information, plan arrival before transition closes at 5:45 a.m., review heat and hydration rules, prepare swim gear, and complete a bicycle safety check. During the event they must use official checkpoints; afterward they collect equipment and report incidents. We want a clearly disclosed mobility or recovery partner to help at a useful moment, never make a purchase mandatory, and give sponsors more accurate audience-intent signals through real contextual interest and explicit opt-ins—not inferred profiles alone. We also want a share-worthy prize for people who complete every required preparation step, so verified achievement becomes an organic hook for event virality through a clean Ready Pass referral. Identify every fragmented touchpoint and actor, integrate them into one official experience, and flag anything the organizer still needs to confirm.`,
+  raw: `We currently send registration by email, operational updates through WhatsApp, safety rules in a PDF, maps on another page, and partner offers separately. Participants are forced to assemble the experience themselves. We are organizing the Coastal 5150 on September 12 at Harbor Park, and we want OCHECK to become the organizer-governed, official and sponsor-enabled integration layer for the whole journey. Most participants are first-timers, so the experience must feel clear, encouraging, and personal. They must confirm registration and emergency information, plan arrival before transition closes at 5:45 a.m., review heat and hydration rules, prepare swim gear, and complete a bicycle safety check. During the event they must use official checkpoints; afterward they collect equipment and report incidents. We want a clearly disclosed mobility or recovery partner to help at a useful moment, never make a purchase mandatory, and give sponsors more accurate audience-intent signals through aggregated contextual interest and explicit opt-ins—not identities, contact data, personal progress, or inferred profiles. We also want a shareable Ready Pass for people who complete every required preparation step, so the satisfaction of verified achievement becomes an organic hook for event reach through a clean referral. Identify every fragmented touchpoint and actor, integrate them into one official experience, and flag anything the organizer still needs to confirm.`,
   source: "Synthetic organizer brief",
   updatedAt: "2026-08-30T12:00:00.000Z",
 };
@@ -149,7 +149,7 @@ export const sampleGeneratedDraft = {
     "The partner benefit is illustrative and creates no external booking.",
   ],
   openQuestions: [],
-  reward: {
+  readyPass: {
     title: "OCHECK Ready Pass",
     unlockRule: "Complete every required Before action.",
     benefit: "Shareable proof of readiness and a clean invitation that helps others begin the same official journey.",
@@ -187,13 +187,13 @@ export const initialState = {
   completedActionIds: ["confirm-entry", "arrival-plan", "health-protocol", "swim-equipment"],
   personalPlan: [],
   sponsorEngagements: [],
-  reward: {
+  readyPass: {
     id: "ready-pass-coastal-5150",
     title: "OCHECK Ready Pass",
     status: "locked",
-    unlockRule: sampleGeneratedDraft.reward.unlockRule,
-    benefit: sampleGeneratedDraft.reward.benefit,
-    sponsor: sampleGeneratedDraft.reward.sponsor,
+    unlockRule: sampleGeneratedDraft.readyPass.unlockRule,
+    benefit: sampleGeneratedDraft.readyPass.benefit,
+    sponsor: sampleGeneratedDraft.readyPass.sponsor,
     code: null,
     referralCode: null,
     claimedAt: null,
@@ -206,7 +206,7 @@ export const initialState = {
     sponsorImpressions: 6940,
     sponsorActionOpens: 1720,
     sponsorActivations: 860,
-    rewardShares: 2480,
+    readyPassShares: 2480,
     referredStarts: 786,
   },
   audit: [

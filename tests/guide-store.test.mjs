@@ -5,7 +5,7 @@ import { sampleGeneratedDraft } from "../src/demo-data.js";
 import { GuideStore } from "../src/guide-store.js";
 import { buildSiteTools } from "../src/site-tools.js";
 
-test("initial state is one action away from a readiness reward", () => {
+test("initial state is one action away from a Ready Pass", () => {
   const store = new GuideStore();
   assert.deepEqual(store.progress(), { completed: 4, total: 8, percent: 50 });
   assert.deepEqual(store.readiness(), {
@@ -13,7 +13,7 @@ test("initial state is one action away from a readiness reward", () => {
     total: 5,
     percent: 80,
     status: "in_progress",
-    rewardStatus: "locked",
+    readyPassStatus: "locked",
   });
 });
 
@@ -47,28 +47,28 @@ test("a personal plan changes only the personal layer", () => {
   assert.equal(after.participant.availableMinutes, 25);
 });
 
-test("the last preparation action unlocks the reward and undo restores the lock", () => {
+test("the last preparation action unlocks the Ready Pass and undo restores the lock", () => {
   const store = new GuideStore();
   const result = store.completeAction("bike-safety");
   assert.equal(result.status, "completed");
-  assert.equal(result.rewardUnlocked, true);
+  assert.equal(result.readyPassUnlocked, true);
   assert.equal(store.readiness().percent, 100);
-  assert.equal(store.getState().reward.status, "available");
+  assert.equal(store.getState().readyPass.status, "available");
 
   const undone = store.undoLastMutation();
   assert.equal(undone.status, "undone");
   assert.equal(store.readiness().percent, 80);
-  assert.equal(store.getState().reward.status, "locked");
+  assert.equal(store.getState().readyPass.status, "locked");
 });
 
-test("a readiness reward cannot be claimed early and creates a clean referral when earned", () => {
+test("a Ready Pass cannot be claimed early and creates a clean referral when earned", () => {
   const store = new GuideStore();
-  assert.throws(() => store.claimReadinessReward(), /Complete every required Before action/);
+  assert.throws(() => store.claimReadyPass(), /Complete every required Before action/);
   store.completeAction("bike-safety");
-  const claimed = store.claimReadinessReward();
+  const claimed = store.claimReadyPass();
   assert.equal(claimed.status, "claimed");
-  assert.equal(claimed.reward.status, "claimed");
-  assert.equal(claimed.reward.code, "READY-5150-DEMO");
+  assert.equal(claimed.readyPass.status, "claimed");
+  assert.equal(claimed.readyPass.code, "READY-5150-DEMO");
   assert.equal(claimed.createsNewRecipientState, true);
   assert.match(claimed.referralPath, /ref=ready-coastal-5150/);
 });
@@ -96,13 +96,15 @@ test("commercial impact separates the event-virality and sponsor-accuracy hooks"
   assert.match(impact.officialIntegration.after, /official, organizer-governed and sponsor-enabled experience integrator/i);
   assert.equal(impact.officialIntegration.governedBy, "Harbor Sports Lab (synthetic)");
   assert.deepEqual(impact.officialIntegration.integratedActors, ["organizer", "participant", "AI agent", "authorized partner"]);
-  assert.equal(impact.hooks.eventVirality.rewardShares, 2480);
+  assert.equal(impact.hooks.eventVirality.readyPassShares, 2480);
   assert.equal(impact.hooks.eventVirality.cleanReferredStarts, 786);
   assert.equal(impact.hooks.eventVirality.shareToStartRate, 31.7);
   assert.equal(impact.hooks.sponsorAccuracy.verifiedIntentSignals, 860);
   assert.equal(impact.hooks.sponsorAccuracy.verifiedIntentRate, 12.4);
   assert.match(impact.hooks.sponsorAccuracy.accuracyPrinciple, /more accurate understanding of customer intent/i);
   assert.match(impact.hooks.sponsorAccuracy.accuracyPrinciple, /does not claim demographic or predictive accuracy/i);
+  assert.match(impact.hooks.sponsorAccuracy.privacyBoundary, /aggregated and non-identifying/i);
+  assert.match(impact.hooks.sponsorAccuracy.privacyBoundary, /no participant identity, contact data, or personal progress/i);
 });
 
 test("the complete synthetic AI draft validates at 100", () => {
@@ -127,7 +129,7 @@ test("AI guide creation stages before a separate publication and preserves match
   assert.equal(published.version, "1.1");
   assert.equal(published.preservedCompletions, 4);
   assert.equal(store.getState().guide.actions.length, 9);
-  assert.equal(store.getState().reward.status, "locked");
+  assert.equal(store.getState().readyPass.status, "locked");
 });
 
 test("participant mode cannot stage or publish official truth", () => {
@@ -155,11 +157,11 @@ test("the WebMCP catalog exposes 13 distinct high-value tools", () => {
   assert.equal(tools.filter((tool) => tool.annotations?.readOnlyHint).length, 6);
   assert.equal(tools.filter((tool) => !tool.annotations?.readOnlyHint).length, 7);
   assert.ok(tools.some((tool) => tool.name === "stage_ai_guide_draft"));
-  assert.ok(tools.some((tool) => tool.name === "claim_readiness_reward"));
+  assert.ok(tools.some((tool) => tool.name === "claim_ready_pass"));
   assert.ok(tools.some((tool) => tool.name === "get_commercial_impact"));
 });
 
-test("the end-to-end story crosses AI creation, official publication, verification, and reward", async () => {
+test("the end-to-end story crosses AI creation, official publication, verification, and Ready Pass", async () => {
   const store = new GuideStore();
   const tools = buildSiteTools({ store, confirmAction: async () => true });
   const byName = Object.fromEntries(tools.map((tool) => [tool.name, tool]));
@@ -174,9 +176,9 @@ test("the end-to-end story crosses AI creation, official publication, verificati
 
   store.setMode("participant");
   const completion = await byName.complete_guide_action.execute({ actionId: "bike-safety" });
-  assert.equal(completion.rewardUnlocked, true);
-  const reward = await byName.claim_readiness_reward.execute();
-  assert.equal(reward.status, "claimed");
+  assert.equal(completion.readyPassUnlocked, true);
+  const readyPass = await byName.claim_ready_pass.execute();
+  assert.equal(readyPass.status, "claimed");
   const impact = await byName.get_commercial_impact.execute();
   assert.equal(impact.synthetic, true);
 });
@@ -184,7 +186,7 @@ test("the end-to-end story crosses AI creation, official publication, verificati
 test("reset restores the full synthetic outcome baseline", () => {
   const store = new GuideStore();
   store.completeAction("bike-safety");
-  store.claimReadinessReward();
+  store.claimReadyPass();
   store.activateSponsorBenefit("mobility-screening");
   store.setMode("impact");
   store.reset();
@@ -193,6 +195,6 @@ test("reset restores the full synthetic outcome baseline", () => {
   assert.deepEqual(state.completedActionIds, ["confirm-entry", "arrival-plan", "health-protocol", "swim-equipment"]);
   assert.deepEqual(state.sponsorEngagements, []);
   assert.equal(state.creation.draft, null);
-  assert.equal(state.reward.status, "locked");
+  assert.equal(state.readyPass.status, "locked");
   assert.equal(store.readiness().percent, 80);
 });

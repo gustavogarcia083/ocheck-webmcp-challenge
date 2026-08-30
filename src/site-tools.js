@@ -50,7 +50,7 @@ export function buildSiteTools({ store, confirmAction }) {
   return [
     {
       name: "get_outcome_state",
-      description: "Read OCHECK's official integrated experience: organizer authority, intended result, definition of done, current phase, next best action, open loops, verified progress, personal plan, sponsored utility, and reward state.",
+      description: "Read OCHECK's official integrated experience: organizer authority, intended result, definition of done, current phase, next best action, open loops, verified progress, personal plan, sponsored utility, and Ready Pass state.",
       inputSchema: objectSchema(),
       annotations: { readOnlyHint: true },
       execute: async () => {
@@ -79,27 +79,27 @@ export function buildSiteTools({ store, confirmAction }) {
           brief: state.brief,
           currentDraft: state.creation.draft,
           expectedOutput: {
-            integration: "How scattered sources, actors, services, sponsor value, and reward become one organizer-governed official experience.",
+            integration: "How scattered sources, actors, services, sponsor value, and achievement moments become one organizer-governed official experience.",
             outcome: "A single explicit result.",
             definitionOfDone: "Observable completion conditions.",
             actions: "Sequenced before, during, and after actions with evidence and sources.",
             openQuestions: "Anything the organizer must still resolve.",
             commerce: "Optional disclosed value placed at a real need; opens and explicit opt-ins become high-intent signals without changing completion.",
-            reward: "A transparent, share-worthy prize whose clean referral can turn verified achievement into event reach.",
+            readyPass: "A shareable proof of verified preparation whose clean referral can turn satisfaction into event reach.",
           },
         };
       },
     },
     {
       name: "validate_guide_draft",
-      description: "Validate the staged AI guide without changing it. Checks outcome clarity, definition of done, phases, critical deadlines, completion evidence, source traceability, sponsorship disclosure, optionality, reward logic, and unresolved questions.",
+      description: "Validate the staged AI guide without changing it. Checks outcome clarity, definition of done, phases, critical deadlines, completion evidence, source traceability, sponsorship disclosure, optionality, Ready Pass logic, and unresolved questions.",
       inputSchema: objectSchema(),
       annotations: { readOnlyHint: true },
       execute: async () => store.validateDraft(),
     },
     {
       name: "get_participant_progress",
-      description: "Read verified participant progress, readiness for the outcome, remaining required actions, personal plan, and reward eligibility.",
+      description: "Read verified participant progress, readiness for the outcome, remaining required actions, personal plan, and Ready Pass eligibility.",
       inputSchema: objectSchema(),
       annotations: { readOnlyHint: true },
       execute: async () => {
@@ -110,13 +110,13 @@ export function buildSiteTools({ store, confirmAction }) {
           readiness: store.readiness(),
           remainingRequired: state.guide.actions.filter((action) => action.required && !state.completedActionIds.includes(action.id)),
           personalPlan: state.personalPlan,
-          reward: state.reward,
+          readyPass: state.readyPass,
         };
       },
     },
     {
       name: "get_sponsor_opportunities",
-      description: "Read optional, clearly disclosed sponsored actions, their contextual user value, and the high-intent signal an explicit activation would create. This never activates a benefit, makes a purchase, or changes completion.",
+      description: "Read optional, clearly disclosed sponsored actions, their contextual user value, and the aggregate high-intent signal an explicit activation would create. This never activates a benefit, makes a purchase, changes completion, or exposes participant identity, contact data, or personal progress.",
       inputSchema: objectSchema(),
       annotations: { readOnlyHint: true },
       execute: async () => {
@@ -124,20 +124,21 @@ export function buildSiteTools({ store, confirmAction }) {
         return {
           opportunities: state.guide.actions.filter((action) => action.sponsored),
           existingEngagements: state.sponsorEngagements,
-          principle: "Commercial interaction and official completion are independent. Context plus explicit opt-in supports more accurate customer-intent understanding than impressions alone.",
+          principle: "Commercial interaction and official completion are independent. Aggregated context plus explicit opt-in supports more accurate customer-intent understanding than impressions alone.",
+          privacy: "No participant account is required in this demo. Partners receive aggregate, non-identifying metrics—not identity, contact data, or personal progress.",
         };
       },
     },
     {
       name: "get_commercial_impact",
-      description: "Read how OCHECK replaces customer self-integration with one official experience, then inspect its synthetic dual-hook impact: readiness, prize-led event virality, contextual sponsor interest, explicit high-intent opt-ins, and clean referral starts.",
+      description: "Read how OCHECK replaces customer self-integration with one official experience, then inspect its synthetic dual-hook impact: readiness, satisfaction-led achievement sharing, aggregate contextual sponsor interest, explicit high-intent opt-ins, and clean referral starts.",
       inputSchema: objectSchema(),
       annotations: { readOnlyHint: true },
       execute: async () => store.commercialImpact(),
     },
     {
       name: "stage_ai_guide_draft",
-      description: "In Organizer + AI mode, integrate scattered sources, actors, services, optional sponsor value, and a share-worthy prize into one proposed organizer-governed official experience. This stages a visible draft only; it does not publish. It requires human confirmation.",
+      description: "In Organizer + AI mode, integrate scattered sources, actors, services, optional sponsor value, and a shareable Ready Pass into one proposed organizer-governed official experience. This stages a visible draft only; it does not publish. It requires human confirmation.",
       inputSchema: objectSchema({
         title: textProperty("Official guide title."),
         organizer: textProperty("Organization responsible for the official truth."),
@@ -165,25 +166,25 @@ export function buildSiteTools({ store, confirmAction }) {
           description: "Unresolved questions the organizer must answer.",
           items: { type: "string" },
         },
-        reward: objectSchema({
-          title: textProperty("Name of the result-based reward."),
+        readyPass: objectSchema({
+          title: textProperty("Name of the shareable Ready Pass."),
           unlockRule: textProperty("Exact verified condition that unlocks it."),
-          benefit: textProperty("Value delivered to the participant."),
-          sponsor: textProperty("Optional synthetic or authorized reward partner."),
+          benefit: textProperty("Satisfaction, recognition, and sharing value delivered to the participant."),
+          sponsor: textProperty("Optional synthetic or authorized supporting partner."),
         }, ["title", "unlockRule", "benefit"]),
-      }, ["title", "organizer", "outcome", "definitionOfDone", "eventDate", "location", "sourceLabel", "actions", "reward"]),
+      }, ["title", "organizer", "outcome", "definitionOfDone", "eventDate", "location", "sourceLabel", "actions", "readyPass"]),
       execute: async (input) => {
         const decision = await confirmOrCancel(confirmAction, {
           eyebrow: "AI Guide Forge · Human review",
           title: "Stage this AI-generated official guide?",
-          summary: `Integrate the scattered brief into a visible official-experience draft with ${input.actions.length} actions, ${input.openQuestions?.length || 0} open questions, an optional relevance hook, and a share-worthy prize hook. Nothing will be published yet.`,
+          summary: `Integrate the scattered brief into a visible official-experience draft with ${input.actions.length} actions, ${input.openQuestions?.length || 0} open questions, an optional relevance hook, and a satisfaction hook built around the Ready Pass. Nothing will be published yet.`,
           details: {
             title: input.title,
             outcome: input.outcome,
             definitionOfDone: input.definitionOfDone,
             actions: input.actions.map((action) => ({ title: action.title, phase: action.phase, required: action.required, sponsored: Boolean(action.sponsored) })),
             openQuestions: input.openQuestions || [],
-            reward: input.reward,
+            readyPass: input.readyPass,
           },
           confirmLabel: "Stage AI draft",
         });
@@ -234,7 +235,7 @@ export function buildSiteTools({ store, confirmAction }) {
     },
     {
       name: "complete_guide_action",
-      description: "Mark one existing guide action complete after explicit human confirmation. Updates visible verified progress and may unlock the readiness reward.",
+      description: "Mark one existing guide action complete after explicit human confirmation. Updates visible verified progress and may unlock the Ready Pass achievement.",
       inputSchema: objectSchema({
         actionId: textProperty("Exact action id from the current official guide."),
       }, ["actionId"]),
@@ -277,20 +278,20 @@ export function buildSiteTools({ store, confirmAction }) {
       },
     },
     {
-      name: "claim_readiness_reward",
-      description: "Claim the OCHECK Ready Pass only after every required Before action is verified. Creates a synthetic prize code and clean referral path—the event virality hook—after human confirmation; it makes no purchase and transfers no personal progress.",
+      name: "claim_ready_pass",
+      description: "Claim the OCHECK Ready Pass only after every required Before action is verified. Creates a synthetic verification code and clean referral path—the satisfaction and event-reach hook—after human confirmation; it makes no purchase and transfers no personal progress.",
       inputSchema: objectSchema(),
       execute: async () => {
         const state = store.getState();
         const readiness = store.readiness();
         const decision = await confirmOrCancel(confirmAction, {
           eyebrow: "Verified result · Human confirmation",
-          title: `Claim “${state.reward.title}”?`,
-          summary: `Readiness is ${readiness.completed} of ${readiness.total}. Claim the shareable result and synthetic benefit only if the unlock rule is satisfied.`,
-          details: { readiness, reward: state.reward, purchaseMade: false },
+          title: `Claim “${state.readyPass.title}”?`,
+          summary: `Readiness is ${readiness.completed} of ${readiness.total}. Claim the shareable achievement only if the verified unlock rule is satisfied.`,
+          details: { readiness, readyPass: state.readyPass, purchaseMade: false },
           confirmLabel: "Claim Ready Pass",
         });
-        return decision.approved ? store.claimReadinessReward() : decision.result;
+        return decision.approved ? store.claimReadyPass() : decision.result;
       },
     },
     {

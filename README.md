@@ -14,22 +14,22 @@ Most digital products add another touchpoint. Chats generate answers. Checklists
 
 The hierarchy is deliberate:
 
-- **Official experience first** — the customer stops acting as the accidental integrator; the organizer governs one route across rules, timing, services, personal AI support, verified progress, optional sponsored value, and reward.
-- **Hook 01 · Event virality** — verified completion unlocks a shareable Ready Pass whose clean referral starts a new guide without transferring personal progress.
+- **Official experience first** — the customer stops acting as the accidental integrator; the organizer governs one route across rules, timing, services, personal AI support, verified progress, optional sponsored value, and shareable achievement.
+- **Hook 01 · Satisfaction and event reach** — verified completion unlocks a shareable Ready Pass that celebrates achievement; its clean referral starts a new guide without transferring personal progress.
 - **Hook 02 · Sponsor accuracy** — a real contextual need leads to a disclosed offer, a need-matched open, and an explicit opt-in. These signals support more accurate customer-intent understanding than impressions alone.
 
-The synthetic demo does not claim demographic or predictive accuracy. It demonstrates a stronger, auditable signal basis: context plus confirmed action.
+The synthetic demo does not claim demographic or predictive accuracy. It demonstrates a stronger, auditable signal basis: aggregate context plus confirmed action. Participants need no account; partners receive no identity, contact data, or personal progress.
 
 The Challenge Edition demonstrates one continuous cycle:
 
 1. **Identify fragmentation** — ChatGPT reads the emails, chats, requirements, service proposals, and open ideas the customer would otherwise have to assemble.
-2. **Integrate** — OCHECK converts those inputs, actors, services, sponsor value, and reward into one inspectable official experience.
-3. **Govern** — OCHECK validates authority, outcome clarity, definition of done, phases, deadlines, evidence, sources, sponsorship disclosure, and reward logic.
+2. **Integrate** — OCHECK converts those inputs, actors, services, sponsor value, and achievement moments into one inspectable official experience.
+3. **Govern** — OCHECK validates authority, outcome clarity, definition of done, phases, deadlines, evidence, sources, sponsorship disclosure, and Ready Pass logic.
 4. **Publish** — Official truth changes only after explicit organizer confirmation.
 5. **Personalize** — The agent creates a personal plan without rewriting the source.
 6. **Verify** — Completion uses visible evidence, human confirmation, audit activity, and Undo.
 7. **Create relevant value** — Sponsored actions remain optional and analytically separate from completion while explicit activations become high-intent signals.
-8. **Reward and grow** — Completing every required preparation action unlocks an OCHECK Ready Pass and a clean, measurable event-referral path.
+8. **Celebrate and grow** — Completing every required preparation action unlocks an OCHECK Ready Pass: visible satisfaction, shareable achievement, and a clean, measurable event-referral path.
 
 This is also a demonstration of how long or chaotic AI conversations can be anchored to a structured outcome state: result, definition of done, current phase, next best action, and remaining open loops.
 
@@ -51,15 +51,15 @@ The project uses generally available OpenAI and Vercel products. It does not cla
 
 ### Participant
 
-A mobile-first OCHECK guide replaces the participant’s work of assembling a fragmented experience. One official source integrates rules, timing, AI assistance, verified progress, optional partner value, and a prize visible from the start. The participant can inspect sources, act, share through a clean referral, and reverse the last confirmed mutation.
+A mobile-first OCHECK guide replaces the participant’s work of assembling a fragmented experience. One official source integrates rules, timing, AI assistance, verified progress, optional partner value, and an achievement visible from the start. The participant can inspect sources, earn and share a Ready Pass through a clean referral, and reverse the last confirmed mutation.
 
 ### Organizer + AI
 
-The AI Guide Forge accepts scattered operational inputs instead of forcing a rigid template. ChatGPT identifies touchpoints, sources, actors, services, and open loops through WebMCP, then integrates them into an organizer-governed official experience. It also designs both ethical growth hooks: share-worthy verified rewards and optional contextual sponsor value. The draft publishes only after validation and a separate human decision.
+The AI Guide Forge accepts scattered operational inputs instead of forcing a rigid template. ChatGPT identifies touchpoints, sources, actors, services, and open loops through WebMCP, then integrates them into an organizer-governed official experience. It also designs both ethical growth hooks: satisfaction-led Ready Pass sharing and optional contextual sponsor value. The draft publishes only after validation and a separate human decision.
 
 ### Partner impact
 
-A synthetic dashboard shows the value of official integration for customers, events, and partners while keeping official progress separate from commercial interaction. It reports readiness, impressions, need-matched opens, explicit benefit opt-ins, prize sharing, and clean referred starts. The agent returns the same model through `get_commercial_impact`. All figures are clearly labeled illustrative.
+A synthetic dashboard shows the value of official integration for customers, events, and partners while keeping official progress separate from commercial interaction. It reports readiness, impressions, need-matched opens, explicit benefit opt-ins, Ready Pass sharing, and clean referred starts. The agent returns the same model through `get_commercial_impact`. All figures are illustrative, aggregated, and non-identifying.
 
 ## What is new for the challenge
 
@@ -72,7 +72,7 @@ OCHECK had a pre-existing private MVP for building and completing official guide
 - separate Organizer + AI, Participant, and Partner Impact perspectives;
 - source traceability and completion evidence;
 - contextual sponsored utility with strict optionality and explicit high-intent signals;
-- result-based Ready Pass and clean prize-led virality loop;
+- verified Ready Pass and clean satisfaction-led sharing loop;
 - visible human confirmation, audit activity, and Undo;
 - synthetic data and one-click reset;
 - dependency-free runtime with no login or private production service.
@@ -85,18 +85,18 @@ The top-level page registers 13 narrow tools through document.modelContext.regis
 
 | Tool | Type | Purpose |
 |---|---|---|
-| get_outcome_state | Read | Inspect the official integrated experience, authority, result, phase, next action, open loops, progress, sponsored utility, and reward. |
+| get_outcome_state | Read | Inspect the official integrated experience, authority, result, phase, next action, open loops, progress, sponsored utility, and Ready Pass. |
 | get_creation_brief | Read | Read the organizer’s scattered inputs, integration burden, and current draft. |
-| validate_guide_draft | Read | Validate governance, evidence, sources, sponsorship, and reward logic. |
-| get_participant_progress | Read | Inspect verified progress, readiness, remaining actions, and reward eligibility. |
+| validate_guide_draft | Read | Validate governance, evidence, sources, sponsorship, and Ready Pass logic. |
+| get_participant_progress | Read | Inspect verified progress, readiness, remaining actions, and Ready Pass eligibility. |
 | get_sponsor_opportunities | Read | Inspect optional, disclosed partner utility and its contextual signal basis without activating it. |
-| get_commercial_impact | Read | Inspect official integration value, prize-led virality, sponsor accuracy signals, and referral metrics. |
+| get_commercial_impact | Read | Inspect official integration value, achievement sharing, aggregate sponsor-intent signals, and referral metrics. |
 | stage_ai_guide_draft | Confirm + write | Integrate scattered inputs into a proposed official experience without publishing. |
 | publish_official_guide | Confirm + write | Publish a valid staged guide as a new official version. |
 | create_personal_plan | Confirm + write | Create a contextual plan without changing official truth. |
 | complete_guide_action | Confirm + write | Verify an action and update visible progress. |
 | activate_sponsor_benefit | Confirm + write | Activate optional synthetic value without purchase or completion. |
-| claim_readiness_reward | Confirm + write | Claim the Ready Pass only after the verified unlock rule is satisfied. |
+| claim_ready_pass | Confirm + write | Claim the Ready Pass only after the verified unlock rule is satisfied. |
 | undo_last_confirmed_action | Confirm + write | Restore the previous reversible state. |
 
 ## Human-control model
@@ -109,9 +109,9 @@ The top-level page registers 13 narrow tools through document.modelContext.regis
 - Results update the same visible state the person and agent inspect.
 - Confirmed changes create audit activity.
 - The last mutation can be undone.
-- Sponsored interaction never makes a purchase, shares personal progress, or completes an official requirement.
+- Sponsored interaction never makes a purchase, exposes identity, contact data, or personal progress, or completes an official requirement.
 - Sponsor “accuracy” is grounded in contextual opens and explicit opt-ins; no unsupported predictive-accuracy claim is made.
-- A prize can be claimed only after its verified unlock rule becomes true, and its referral starts a clean guide.
+- A Ready Pass can be claimed only after its verified unlock rule becomes true, and its referral starts a clean guide.
 
 The built-in browser applies its own Site Tools safety review. OCHECK’s confirmation layer is an additional product control.
 
@@ -147,7 +147,7 @@ Emails + chats + PDFs + maps + services + partner proposals
                            ↓
         Organizer-governed Official Experience State
                            ↓
-       Participant journey + Sponsor Hook + Prize Hook
+   Participant journey + Sponsor Hook + Satisfaction Hook
 ~~~
 
 The edition intentionally has no runtime dependencies or backend:
@@ -164,7 +164,7 @@ index.html + styles.css
 
 ## Data and privacy
 
-All events, participants, organizations, partners, figures, reward codes, and activity are synthetic. State exists only in the current page and resets on reload or through **Reset demo**.
+All events, participants, organizations, partners, figures, Ready Pass codes, and activity are synthetic. State exists only in the current page and resets on reload or through **Reset demo**. The participant journey requires no account or profile. Sponsor-facing metrics are aggregate and non-identifying; they expose no identity, contact data, or personal progress.
 
 ## Status and license
 

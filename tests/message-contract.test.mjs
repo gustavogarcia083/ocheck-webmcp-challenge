@@ -12,7 +12,11 @@ test("the demo leads with the official integration layer and retains both growth
   assert.match(html, /The customer becomes the accidental integrator\./);
   assert.match(html, /One official, organizer-governed experience\./);
   assert.match(html, /One trusted path\. Two growth hooks\./);
-  assert.match(html, /Prize visible from the start/);
+  assert.match(html, /Your achievement, visible from the start/);
+  assert.match(html, /Satisfaction hook · Verified achievement/);
+  assert.match(html, /aggregated and non-identifying/i);
+  const visibleText = html.replace(/<[^>]*>/g, " ");
+  assert.doesNotMatch(visibleText, /\b(prize|reward|rewards)\b/i);
   assert.match(html, /The human mind has always had limits\. Until now\./);
 });
 
@@ -29,5 +33,9 @@ test("the recording script is concise and states the evidence boundary", async (
   assert.match(narration, /official and sponsor-enabled experience layer/i);
   assert.match(narration, /more accurate understanding of customer intent than impressions alone/i);
   assert.match(narration, /does not claim perfect prediction/i);
+  assert.match(narration, /Ready Pass is the satisfaction hook/i);
+  assert.match(narration, /aggregated and non-identifying/i);
+  assert.match(narration, /no identity, contact data, or personal progress is shared/i);
+  assert.doesNotMatch(narration, /\b(prize|reward|rewards)\b/i);
   assert.match(narration, /One experience\. One official truth\./);
 });
