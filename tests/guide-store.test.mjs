@@ -86,6 +86,18 @@ test("sponsor value is optional, disclosed, non-purchasing, measurable, and reve
   assert.equal(store.commercialImpact().sponsorActivations, beforeActivations);
 });
 
+test("commercial impact separates the event-virality and sponsor-accuracy hooks", () => {
+  const store = new GuideStore();
+  const impact = store.commercialImpact();
+  assert.equal(impact.hooks.eventVirality.rewardShares, 2480);
+  assert.equal(impact.hooks.eventVirality.cleanReferredStarts, 786);
+  assert.equal(impact.hooks.eventVirality.shareToStartRate, 31.7);
+  assert.equal(impact.hooks.sponsorAccuracy.verifiedIntentSignals, 860);
+  assert.equal(impact.hooks.sponsorAccuracy.verifiedIntentRate, 12.4);
+  assert.match(impact.hooks.sponsorAccuracy.accuracyPrinciple, /more accurate understanding of customer intent/i);
+  assert.match(impact.hooks.sponsorAccuracy.accuracyPrinciple, /does not claim demographic or predictive accuracy/i);
+});
+
 test("the complete synthetic AI draft validates at 100", () => {
   const store = new GuideStore();
   const validation = store.validateDraft(sampleGeneratedDraft);

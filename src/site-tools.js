@@ -83,8 +83,8 @@ export function buildSiteTools({ store, confirmAction }) {
             definitionOfDone: "Observable completion conditions.",
             actions: "Sequenced before, during, and after actions with evidence and sources.",
             openQuestions: "Anything the organizer must still resolve.",
-            commerce: "Optional disclosed value, never required for completion.",
-            reward: "A transparent rule for unlocking a meaningful result.",
+            commerce: "Optional disclosed value placed at a real need; opens and explicit opt-ins become high-intent signals without changing completion.",
+            reward: "A transparent, share-worthy prize whose clean referral can turn verified achievement into event reach.",
           },
         };
       },
@@ -115,7 +115,7 @@ export function buildSiteTools({ store, confirmAction }) {
     },
     {
       name: "get_sponsor_opportunities",
-      description: "Read optional, clearly disclosed sponsored actions and their user value. This never activates a benefit, makes a purchase, or changes completion.",
+      description: "Read optional, clearly disclosed sponsored actions, their contextual user value, and the high-intent signal an explicit activation would create. This never activates a benefit, makes a purchase, or changes completion.",
       inputSchema: objectSchema(),
       annotations: { readOnlyHint: true },
       execute: async () => {
@@ -123,20 +123,20 @@ export function buildSiteTools({ store, confirmAction }) {
         return {
           opportunities: state.guide.actions.filter((action) => action.sponsored),
           existingEngagements: state.sponsorEngagements,
-          principle: "Commercial interaction and official completion are independent.",
+          principle: "Commercial interaction and official completion are independent. Context plus explicit opt-in supports more accurate customer-intent understanding than impressions alone.",
         };
       },
     },
     {
       name: "get_commercial_impact",
-      description: "Read synthetic organizer and partner impact: readiness, sponsor funnel, reward sharing, referral starts, and the disclosure that all challenge figures are illustrative.",
+      description: "Read OCHECK's synthetic dual-hook impact: customer readiness, prize-led event virality, contextual sponsor interest, explicit high-intent opt-ins, clean referral starts, and the disclosure that all figures are illustrative.",
       inputSchema: objectSchema(),
       annotations: { readOnlyHint: true },
       execute: async () => store.commercialImpact(),
     },
     {
       name: "stage_ai_guide_draft",
-      description: "In Organizer + AI mode, convert an unstructured brief into a complete proposed official guide. This stages a visible draft only; it does not publish. It requires human confirmation.",
+      description: "In Organizer + AI mode, convert an unstructured brief into a complete proposed official guide, including the customer experience, an optional contextual sponsor hook, and a share-worthy prize hook. This stages a visible draft only; it does not publish. It requires human confirmation.",
       inputSchema: objectSchema({
         title: textProperty("Official guide title."),
         organizer: textProperty("Organization responsible for the official truth."),
@@ -175,7 +175,7 @@ export function buildSiteTools({ store, confirmAction }) {
         const decision = await confirmOrCancel(confirmAction, {
           eyebrow: "AI Guide Forge · Human review",
           title: "Stage this AI-generated official guide?",
-          summary: `Create a visible draft with ${input.actions.length} actions, ${input.openQuestions?.length || 0} open questions, and a result-based reward. Nothing will be published yet.`,
+          summary: `Create a visible draft with ${input.actions.length} actions, ${input.openQuestions?.length || 0} open questions, an optional relevance hook, and a share-worthy prize hook. Nothing will be published yet.`,
           details: {
             title: input.title,
             outcome: input.outcome,
@@ -252,7 +252,7 @@ export function buildSiteTools({ store, confirmAction }) {
     },
     {
       name: "activate_sponsor_benefit",
-      description: "Activate one optional, disclosed synthetic partner benefit after human confirmation. It records interest only, makes no purchase, opens no external destination, and never completes a required action.",
+      description: "Activate one optional, disclosed synthetic partner benefit after human confirmation. It records a contextual high-intent signal only, makes no purchase, opens no external destination, shares no personal progress, and never completes a required action.",
       inputSchema: objectSchema({
         actionId: textProperty("Exact id returned by get_sponsor_opportunities."),
       }, ["actionId"]),
@@ -262,7 +262,7 @@ export function buildSiteTools({ store, confirmAction }) {
         const decision = await confirmOrCancel(confirmAction, {
           eyebrow: "Sponsored utility · Human confirmation",
           title: "Activate this optional demo benefit?",
-          summary: `${action.sponsored.partner} offers ${action.sponsored.value}. No purchase will be made and official completion will not change.`,
+          summary: `${action.sponsored.partner} offers ${action.sponsored.value}. This records one synthetic high-intent opt-in; no purchase will be made and official completion will not change.`,
           details: {
             actionId,
             disclosure: action.sponsored.disclosure,
@@ -277,7 +277,7 @@ export function buildSiteTools({ store, confirmAction }) {
     },
     {
       name: "claim_readiness_reward",
-      description: "Claim the OCHECK Ready Pass only after every required Before action is verified. Creates a synthetic reward code and clean referral path after human confirmation; it makes no purchase.",
+      description: "Claim the OCHECK Ready Pass only after every required Before action is verified. Creates a synthetic prize code and clean referral path—the event virality hook—after human confirmation; it makes no purchase and transfers no personal progress.",
       inputSchema: objectSchema(),
       execute: async () => {
         const state = store.getState();

@@ -156,11 +156,11 @@ function renderPersonalPlan(state) {
 function renderPrompts() {
   const participantPrompts = [
     "Read my OCHECK outcome state. I have 25 minutes, this is my first event, and I prefer concise, low-impact guidance. Create a personal plan without changing official truth.",
-    "Show my remaining critical preparation actions. Complete the bicycle safety check only after I confirm; if that makes me ready, explain the unlocked reward before claiming it.",
-    "Show the optional sponsored opportunity, explain its disclosure and terms, and activate it only after I confirm. Do not mark any official action complete.",
+    "Show my remaining critical preparation actions. Complete the bicycle safety check only after I confirm; if that makes me ready, explain the prize, its clean referral, and how sharing helps the event grow before claiming it.",
+    "Show the optional sponsored opportunity, explain why it is relevant, its disclosure and terms, and activate it only after I confirm. Explain the high-intent signal created without marking any official action complete.",
   ];
   const organizerPrompts = [
-    "Read the current organizer brief. Convert it into an official outcome contract with a clear result, definition of done, sequenced actions, completion evidence, sources, assumptions, open questions, one optional disclosed sponsor opportunity, and a result-based reward. Stage the draft but do not publish.",
+    "Read the current organizer brief. Convert it into an official outcome contract with a clear result, definition of done, sequenced actions, completion evidence, sources, assumptions, open questions, one optional disclosed sponsor opportunity, and a share-worthy result-based prize. Design two ethical growth hooks: verified prize sharing for event virality and contextual opt-in signals for sponsor accuracy. Stage the draft but do not publish.",
     "Validate the staged guide. Explain every blocking issue and open question without changing the draft.",
     "If validation passes, show me exactly what will become official and publish only after my explicit confirmation.",
   ];
@@ -196,6 +196,22 @@ function renderParticipant(state) {
   $("#readiness-percent").textContent = `${readiness.percent}%`;
   $("#readiness-fill").style.width = `${readiness.percent}%`;
   $("#overall-progress").textContent = `${progress.completed} of ${progress.total}`;
+
+  const remainingPreparation = state.guide.actions.filter((action) => (
+    action.phase === "before"
+    && action.required
+    && !state.completedActionIds.includes(action.id)
+  )).length;
+  $("#reward-teaser-benefit").textContent = state.reward.status === "claimed"
+    ? "Prize claimed · your clean referral can invite the next participant without sharing your progress."
+    : state.reward.status === "available"
+      ? `Unlocked · ${state.reward.benefit}`
+      : `${remainingPreparation} required preparation ${remainingPreparation === 1 ? "check" : "checks"} left · ${state.reward.benefit}`;
+  $("#preview-reward").textContent = state.reward.status === "claimed"
+    ? "View Ready Pass"
+    : state.reward.status === "available"
+      ? "Claim prize"
+      : "Preview prize";
 
   const rewardChip = $("#reward-chip");
   rewardChip.className = `reward-chip ${state.reward.status}`;
@@ -273,8 +289,9 @@ function renderDraft(state) {
           </div>`).join("")}
       </div>
       <div class="draft-reward">
-        <span>Result-based reward</span>
+        <span>Prize + event virality hook</span>
         <strong>${escapeHtml(draft.reward.title)} · ${escapeHtml(draft.reward.unlockRule)}</strong>
+        <small>${escapeHtml(draft.reward.benefit)} · A clean referral turns verified achievement into organic reach.</small>
       </div>
       <div class="draft-questions">
         <span>Open loops</span>
@@ -292,6 +309,7 @@ function renderImpact() {
   $("#impact-impressions").textContent = formatNumber(impact.sponsorImpressions);
   $("#impact-opens").textContent = formatNumber(impact.sponsorActionOpens);
   $("#impact-activations").textContent = formatNumber(impact.sponsorActivations);
+  $("#impact-intent-signals").textContent = formatNumber(impact.hooks.sponsorAccuracy.verifiedIntentSignals);
   $("#impact-shares").textContent = formatNumber(impact.rewardShares);
   $("#impact-referrals").textContent = formatNumber(impact.referredStarts);
 }
@@ -410,7 +428,7 @@ async function completeFromInterface(actionId) {
   if (!approved) return;
   const result = store.completeAction(actionId);
   showToast(result.rewardUnlocked
-    ? "Progress verified. Every preparation loop is closed and the Ready Pass is unlocked."
+    ? "Progress verified. The prize is unlocked—and the event virality hook is ready to share."
     : "Progress verified and added to the audit trail.");
   if (result.rewardUnlocked) {
     closeAction();
@@ -438,7 +456,7 @@ async function activateSponsorFromInterface(actionId) {
   });
   if (!approved) return;
   const result = store.activateSponsorBenefit(actionId);
-  showToast(`Optional benefit activated · ${result.demoCode}. Official progress did not change.`);
+  showToast(`Optional benefit activated · ${result.demoCode}. One synthetic high-intent signal was recorded; official progress did not change.`);
   openAction(actionId);
 }
 
@@ -498,6 +516,7 @@ $("#activate-sponsor").addEventListener("click", () => {
 });
 
 $("#reward-chip").addEventListener("click", openReward);
+$("#preview-reward").addEventListener("click", openReward);
 $("#open-reward").addEventListener("click", openReward);
 $("#reward-close").addEventListener("click", closeReward);
 rewardModal.addEventListener("click", (event) => {
@@ -518,7 +537,7 @@ $("#claim-reward").addEventListener("click", async () => {
   });
   if (!approved) return;
   store.claimReadinessReward();
-  showToast("Ready Pass claimed. A clean referral can start a new guide without sharing your progress.");
+  showToast("Ready Pass claimed. Your achievement can now create organic event reach through a clean referral.");
   openReward();
 });
 
@@ -647,12 +666,12 @@ for (const root of [$("#participant-prompts"), $("#organizer-prompts")]) {
 }
 
 $("#copy-organizer-prompt").addEventListener("click", () => copyText(
-  "Read the current organizer brief with get_creation_brief. Convert it into an official OCHECK outcome contract: one explicit result, a definition of done, sequenced Before/During/After actions, observable completion evidence, source traceability, assumptions, open questions, one optional and clearly disclosed sponsor opportunity that is never required, and a result-based reward. Stage it with stage_ai_guide_draft, then validate it. Do not publish until I explicitly confirm.",
+  "Read the current organizer brief with get_creation_brief. Convert it into an official OCHECK outcome contract: one explicit result, a definition of done, sequenced Before/During/After actions, observable completion evidence, source traceability, assumptions, open questions, one optional and clearly disclosed sponsor opportunity that is never required, and a share-worthy result-based prize. Design an ethical dual hook: verified prize sharing for event virality and contextual opt-in signals for more accurate sponsor audience intelligence. Stage it with stage_ai_guide_draft, then validate it. Do not publish until I explicitly confirm.",
   "AI guide-creation prompt copied.",
 ));
 
 $("#copy-demo-prompt").addEventListener("click", () => copyText(
-  "Work with the OCHECK page using its Site Tools and the same visible state. First, in Organizer + AI mode, read the messy brief, stage a complete official guide, validate it, and publish only after my confirmation. Then, in Participant mode, create a 25-minute personal plan without changing official truth, verify the last critical preparation action after my confirmation, explain the unlocked Ready Pass, show the optional disclosed sponsor value without making it mandatory, and claim the reward only after I approve. Finish by reading commercial impact and explaining how OCHECK turns verified utility into measurable value. Never skip a confirmation.",
+  "Work with the OCHECK page using its Site Tools and the same visible state. First, in Organizer + AI mode, read the messy brief and stage a complete official guide with a customer experience, a share-worthy prize hook for event virality, and an optional contextual sponsor hook for high-intent audience signals. Validate it and publish only after my confirmation. Then, in Participant mode, create a 25-minute personal plan without changing official truth, verify the last critical preparation action after my confirmation, explain and claim the unlocked Ready Pass only after I approve, and show how its clean referral creates organic reach. Show the disclosed sponsor value without making it mandatory, then read commercial impact and distinguish impressions, contextual interest, explicit opt-ins, shares, and referred starts. Never skip a confirmation.",
   "Complete end-to-end demo prompt copied.",
 ));
 

@@ -450,12 +450,37 @@ export class GuideStore {
   commercialImpact() {
     const impact = clone(this.state.impact);
     const percent = (part, whole) => (whole ? Math.round((part / whole) * 1000) / 10 : 0);
+    const sponsorOpenRate = percent(impact.sponsorActionOpens, impact.sponsorImpressions);
+    const sponsorActivationRate = percent(impact.sponsorActivations, impact.sponsorActionOpens);
+    const verifiedIntentRate = percent(impact.sponsorActivations, impact.sponsorImpressions);
+    const rewardReferralRate = percent(impact.referredStarts, impact.rewardShares);
     return {
       ...impact,
       readinessRate: percent(impact.readyPasses, impact.activeParticipants),
-      sponsorOpenRate: percent(impact.sponsorActionOpens, impact.sponsorImpressions),
-      sponsorActivationRate: percent(impact.sponsorActivations, impact.sponsorActionOpens),
-      rewardReferralRate: percent(impact.referredStarts, impact.rewardShares),
+      sponsorOpenRate,
+      sponsorActivationRate,
+      verifiedIntentRate,
+      rewardReferralRate,
+      hooks: {
+        customerExperience: {
+          promise: "One official path, personal assistance, visible progress, useful optional value, and an earned prize.",
+          currentRewardStatus: this.state.reward.status,
+        },
+        eventVirality: {
+          mechanism: "Verified readiness → shareable Ready Pass → clean referred guide start.",
+          rewardShares: impact.rewardShares,
+          cleanReferredStarts: impact.referredStarts,
+          shareToStartRate: rewardReferralRate,
+        },
+        sponsorAccuracy: {
+          mechanism: "Contextual need → disclosed offer open → explicit opt-in.",
+          contextualOpens: impact.sponsorActionOpens,
+          verifiedIntentSignals: impact.sponsorActivations,
+          verifiedIntentRate,
+          signalBasis: ["need-matched action open", "explicit benefit activation"],
+          accuracyPrinciple: "Real contextual actions support a more accurate understanding of customer intent than impressions alone; this demo does not claim demographic or predictive accuracy.",
+        },
+      },
       disclosure: "All dashboard figures are synthetic challenge data.",
       currentDemoEngagements: clone(this.state.sponsorEngagements),
     };

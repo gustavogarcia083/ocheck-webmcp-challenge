@@ -1,9 +1,9 @@
 {
   "name": "ocheck-webmcp-challenge",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
-  "description": "OCHECK WebMCP Challenge Edition: from unstructured intent to verified outcomes.",
+  "description": "OCHECK WebMCP Challenge Edition: customer value, prize-led event virality, and high-intent sponsor signals.",
   "scripts": {
     "dev": "node scripts/serve.mjs",
     "test": "node --test",
