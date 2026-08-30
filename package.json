@@ -1,9 +1,9 @@
 {
   "name": "ocheck-webmcp-challenge",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "type": "module",
-  "description": "OCHECK WebMCP Challenge Edition: customer value, prize-led event virality, and high-intent sponsor signals.",
+  "description": "OCHECK WebMCP Challenge Edition: the official, organizer-governed and sponsor-enabled integration layer for fragmented experiences.",
   "scripts": {
     "dev": "node scripts/serve.mjs",
     "test": "node --test",

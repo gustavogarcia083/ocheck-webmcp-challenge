@@ -4,11 +4,14 @@ import test from "node:test";
 
 const root = new URL("../", import.meta.url);
 
-test("the demo leads with customer experience and the dual hook", async () => {
+test("the demo leads with the official integration layer and retains both growth hooks", async () => {
   const html = await readFile(new URL("index.html", root), "utf8");
-  assert.match(html, /One customer experience\. Two growth hooks\./);
-  assert.match(html, /Hook 01 · Event virality/);
-  assert.match(html, /Hook 02 · Sponsor accuracy/);
+  assert.match(html, /Every experience already has an integrator/);
+  assert.match(html, /Make it official\./);
+  assert.match(html, /From scattered touchpoints to one official experience\./);
+  assert.match(html, /The customer becomes the accidental integrator\./);
+  assert.match(html, /One official, organizer-governed experience\./);
+  assert.match(html, /One trusted path\. Two growth hooks\./);
   assert.match(html, /Prize visible from the start/);
   assert.match(html, /The human mind has always had limits\. Until now\./);
 });
@@ -21,7 +24,10 @@ test("the recording script is concise and states the evidence boundary", async (
     .trim();
   const words = narration.split(/\s+/).filter(Boolean);
   assert.ok(words.length <= 380, `Narration has ${words.length} words; expected at most 380.`);
+  assert.match(narration, /Every experience already has an integrator/i);
+  assert.match(narration, /usually the customer/i);
+  assert.match(narration, /official and sponsor-enabled experience layer/i);
   assert.match(narration, /more accurate understanding of customer intent than impressions alone/i);
   assert.match(narration, /does not claim perfect prediction/i);
-  assert.match(narration, /Human intent\. Agent execution\. Customer value\. Verified growth\./);
+  assert.match(narration, /One experience\. One official truth\./);
 });

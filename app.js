@@ -155,12 +155,12 @@ function renderPersonalPlan(state) {
 
 function renderPrompts() {
   const participantPrompts = [
-    "Read my OCHECK outcome state. I have 25 minutes, this is my first event, and I prefer concise, low-impact guidance. Create a personal plan without changing official truth.",
+    "Read my OCHECK outcome state. First explain what scattered information, services, and actors OCHECK integrated so I do not have to. I have 25 minutes, this is my first event, and I prefer concise, low-impact guidance. Create a personal plan without changing official truth.",
     "Show my remaining critical preparation actions. Complete the bicycle safety check only after I confirm; if that makes me ready, explain the prize, its clean referral, and how sharing helps the event grow before claiming it.",
-    "Show the optional sponsored opportunity, explain why it is relevant, its disclosure and terms, and activate it only after I confirm. Explain the high-intent signal created without marking any official action complete.",
+    "Show the optional sponsored opportunity inside my official experience, explain why it is relevant, its disclosure and terms, and activate it only after I confirm. Explain the high-intent signal created without marking any official action complete.",
   ];
   const organizerPrompts = [
-    "Read the current organizer brief. Convert it into an official outcome contract with a clear result, definition of done, sequenced actions, completion evidence, sources, assumptions, open questions, one optional disclosed sponsor opportunity, and a share-worthy result-based prize. Design two ethical growth hooks: verified prize sharing for event virality and contextual opt-in signals for sponsor accuracy. Stage the draft but do not publish.",
+    "Read the current organizer brief. First identify every fragmented touchpoint, source, actor, service, and burden currently integrated by the customer. Then design OCHECK as the organizer-governed official and sponsor-enabled integration layer: one outcome contract with a clear result, definition of done, sequenced actions, completion evidence, sources, assumptions, open questions, one optional disclosed sponsor opportunity, and a share-worthy result-based prize. Keep two ethical growth hooks inside that official experience: verified prize sharing for event virality and contextual opt-in signals for sponsor accuracy. Stage the draft but do not publish.",
     "Validate the staged guide. Explain every blocking issue and open question without changing the draft.",
     "If validation passes, show me exactly what will become official and publish only after my explicit confirmation.",
   ];
@@ -254,7 +254,7 @@ function renderDraft(state) {
       <div class="empty-state">
         <span aria-hidden="true">✦</span>
         <h4>Ask ChatGPT to build the guide.</h4>
-        <p>The agent reads the messy brief, proposes structured actions, preserves assumptions, exposes open questions, and waits for human approval.</p>
+        <p>The agent integrates scattered inputs into one governed journey, preserves assumptions, exposes open questions, and waits for human approval.</p>
       </div>`;
     return;
   }
@@ -273,6 +273,10 @@ function renderDraft(state) {
         <h4>${escapeHtml(draft.title)}</h4>
         <p>${escapeHtml(draft.outcome)}</p>
       </header>
+      <div class="draft-integration">
+        <span>Official integration layer</span>
+        <strong>Organizer-approved truth, participant guidance, authorized partner value, and result-based reward become one governed experience.</strong>
+      </div>
       <div class="draft-definition">
         <span>Definition of done</span>
         <strong>${escapeHtml(draft.definitionOfDone)}</strong>
@@ -655,7 +659,7 @@ $("#reset-demo").addEventListener("click", async () => {
   closeAction();
   closeReward();
   store.reset();
-  showToast("The complete OCHECK demonstration was reset.");
+  showToast("The complete OCHECK official-experience demonstration was reset.");
 });
 
 for (const root of [$("#participant-prompts"), $("#organizer-prompts")]) {
@@ -666,12 +670,12 @@ for (const root of [$("#participant-prompts"), $("#organizer-prompts")]) {
 }
 
 $("#copy-organizer-prompt").addEventListener("click", () => copyText(
-  "Read the current organizer brief with get_creation_brief. Convert it into an official OCHECK outcome contract: one explicit result, a definition of done, sequenced Before/During/After actions, observable completion evidence, source traceability, assumptions, open questions, one optional and clearly disclosed sponsor opportunity that is never required, and a share-worthy result-based prize. Design an ethical dual hook: verified prize sharing for event virality and contextual opt-in signals for more accurate sponsor audience intelligence. Stage it with stage_ai_guide_draft, then validate it. Do not publish until I explicitly confirm.",
+  "Read the current organizer brief with get_creation_brief. Identify the fragmented sources, actors, services, and customer self-integration burden. Convert them into OCHECK as the organizer-governed official and sponsor-enabled integration layer: one explicit result, a definition of done, sequenced Before/During/After actions, observable completion evidence, source traceability, assumptions, open questions, one optional and clearly disclosed sponsor opportunity that is never required, and a share-worthy result-based prize. Design an ethical dual hook inside that official experience: verified prize sharing for event virality and contextual opt-in signals for more accurate sponsor audience intelligence. Stage it with stage_ai_guide_draft, then validate it. Do not publish until I explicitly confirm.",
   "AI guide-creation prompt copied.",
 ));
 
 $("#copy-demo-prompt").addEventListener("click", () => copyText(
-  "Work with the OCHECK page using its Site Tools and the same visible state. First, in Organizer + AI mode, read the messy brief and stage a complete official guide with a customer experience, a share-worthy prize hook for event virality, and an optional contextual sponsor hook for high-intent audience signals. Validate it and publish only after my confirmation. Then, in Participant mode, create a 25-minute personal plan without changing official truth, verify the last critical preparation action after my confirmation, explain and claim the unlocked Ready Pass only after I approve, and show how its clean referral creates organic reach. Show the disclosed sponsor value without making it mandatory, then read commercial impact and distinguish impressions, contextual interest, explicit opt-ins, shares, and referred starts. Never skip a confirmation.",
+  "Work with the OCHECK page using its Site Tools and the same visible state. First explain how the customer currently integrates a fragmented experience. In Organizer + AI mode, read the scattered brief and stage OCHECK as the organizer-governed official and sponsor-enabled integration layer, including a share-worthy prize hook for event virality and an optional contextual sponsor hook for high-intent audience signals. Validate it and publish only after my confirmation. Then, in Participant mode, show the unified official experience, create a 25-minute personal plan without changing official truth, verify the last critical preparation action after my confirmation, explain and claim the unlocked Ready Pass only after I approve, and show how its clean referral creates organic reach. Show the disclosed sponsor value without making it mandatory, then read commercial impact and distinguish official integration, impressions, contextual interest, explicit opt-ins, shares, and referred starts. Never skip a confirmation.",
   "Complete end-to-end demo prompt copied.",
 ));
 

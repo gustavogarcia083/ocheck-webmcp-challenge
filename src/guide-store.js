@@ -154,6 +154,18 @@ export class GuideStore {
           ? "after"
           : "complete";
     return {
+      experienceIntegration: {
+        role: "OCHECK is the official, organizer-governed and sponsor-enabled integrator of the experience.",
+        replaces: "The participant reconciling scattered emails, chats, PDFs, maps, services, partner offers, and rewards.",
+        authority: this.state.guide.organizer,
+        integratedLayers: [
+          "official truth",
+          "personal AI assistance",
+          "verified progress",
+          "optional sponsored utility",
+          "result-based reward",
+        ],
+      },
       outcome: this.state.guide.outcome,
       definitionOfDone: this.state.guide.definitionOfDone,
       currentPhase,
@@ -456,6 +468,13 @@ export class GuideStore {
     const rewardReferralRate = percent(impact.referredStarts, impact.rewardShares);
     return {
       ...impact,
+      officialIntegration: {
+        before: "Customer as accidental integrator of fragmented touchpoints.",
+        after: "OCHECK as the official, organizer-governed and sponsor-enabled experience integrator.",
+        sourceTypes: ["email", "chat", "PDF", "map", "service", "partner offer", "reward"],
+        governedBy: this.state.guide.organizer,
+        integratedActors: ["organizer", "participant", "AI agent", "authorized partner"],
+      },
       readinessRate: percent(impact.readyPasses, impact.activeParticipants),
       sponsorOpenRate,
       sponsorActivationRate,
@@ -463,7 +482,7 @@ export class GuideStore {
       rewardReferralRate,
       hooks: {
         customerExperience: {
-          promise: "One official path, personal assistance, visible progress, useful optional value, and an earned prize.",
+          promise: "One official source integrates rules, timing, personal assistance, verified progress, useful optional value, and an earned prize so the customer does not have to.",
           currentRewardStatus: this.state.reward.status,
         },
         eventVirality: {

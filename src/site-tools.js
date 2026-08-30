@@ -50,7 +50,7 @@ export function buildSiteTools({ store, confirmAction }) {
   return [
     {
       name: "get_outcome_state",
-      description: "Read OCHECK's structured outcome: intended result, definition of done, current phase, next best action, open loops, verified progress, personal plan, and reward state.",
+      description: "Read OCHECK's official integrated experience: organizer authority, intended result, definition of done, current phase, next best action, open loops, verified progress, personal plan, sponsored utility, and reward state.",
       inputSchema: objectSchema(),
       annotations: { readOnlyHint: true },
       execute: async () => {
@@ -70,7 +70,7 @@ export function buildSiteTools({ store, confirmAction }) {
     },
     {
       name: "get_creation_brief",
-      description: "Read the organizer's unstructured brief that must be converted into an official, sequenced, verifiable guide. This never changes the brief or guide.",
+      description: "Read the organizer's scattered emails, messages, requirements, partner proposals, and open ideas that must become one official, sequenced, verifiable experience. This never changes the brief or guide.",
       inputSchema: objectSchema(),
       annotations: { readOnlyHint: true },
       execute: async () => {
@@ -79,6 +79,7 @@ export function buildSiteTools({ store, confirmAction }) {
           brief: state.brief,
           currentDraft: state.creation.draft,
           expectedOutput: {
+            integration: "How scattered sources, actors, services, sponsor value, and reward become one organizer-governed official experience.",
             outcome: "A single explicit result.",
             definitionOfDone: "Observable completion conditions.",
             actions: "Sequenced before, during, and after actions with evidence and sources.",
@@ -129,14 +130,14 @@ export function buildSiteTools({ store, confirmAction }) {
     },
     {
       name: "get_commercial_impact",
-      description: "Read OCHECK's synthetic dual-hook impact: customer readiness, prize-led event virality, contextual sponsor interest, explicit high-intent opt-ins, clean referral starts, and the disclosure that all figures are illustrative.",
+      description: "Read how OCHECK replaces customer self-integration with one official experience, then inspect its synthetic dual-hook impact: readiness, prize-led event virality, contextual sponsor interest, explicit high-intent opt-ins, and clean referral starts.",
       inputSchema: objectSchema(),
       annotations: { readOnlyHint: true },
       execute: async () => store.commercialImpact(),
     },
     {
       name: "stage_ai_guide_draft",
-      description: "In Organizer + AI mode, convert an unstructured brief into a complete proposed official guide, including the customer experience, an optional contextual sponsor hook, and a share-worthy prize hook. This stages a visible draft only; it does not publish. It requires human confirmation.",
+      description: "In Organizer + AI mode, integrate scattered sources, actors, services, optional sponsor value, and a share-worthy prize into one proposed organizer-governed official experience. This stages a visible draft only; it does not publish. It requires human confirmation.",
       inputSchema: objectSchema({
         title: textProperty("Official guide title."),
         organizer: textProperty("Organization responsible for the official truth."),
@@ -175,7 +176,7 @@ export function buildSiteTools({ store, confirmAction }) {
         const decision = await confirmOrCancel(confirmAction, {
           eyebrow: "AI Guide Forge · Human review",
           title: "Stage this AI-generated official guide?",
-          summary: `Create a visible draft with ${input.actions.length} actions, ${input.openQuestions?.length || 0} open questions, an optional relevance hook, and a share-worthy prize hook. Nothing will be published yet.`,
+          summary: `Integrate the scattered brief into a visible official-experience draft with ${input.actions.length} actions, ${input.openQuestions?.length || 0} open questions, an optional relevance hook, and a share-worthy prize hook. Nothing will be published yet.`,
           details: {
             title: input.title,
             outcome: input.outcome,
@@ -191,7 +192,7 @@ export function buildSiteTools({ store, confirmAction }) {
     },
     {
       name: "publish_official_guide",
-      description: "In Organizer + AI mode, publish the staged draft only after it passes validation and the human explicitly confirms. This replaces official guide content, increments the version, and preserves matching verified completions.",
+      description: "In Organizer + AI mode, activate the staged integration layer as the official experience only after validation and explicit human confirmation. This replaces official guide content, increments the version, and preserves matching verified completions.",
       inputSchema: objectSchema(),
       execute: async () => {
         const state = store.getState();
@@ -213,7 +214,7 @@ export function buildSiteTools({ store, confirmAction }) {
     },
     {
       name: "create_personal_plan",
-      description: "Create a personal execution plan from the official guide using time, experience, and accessibility context. It never rewrites official truth and requires human confirmation.",
+      description: "Create a personal execution plan inside the official experience using time, experience, and accessibility context. It never rewrites official truth and requires human confirmation.",
       inputSchema: objectSchema({
         availableMinutes: { type: "number", minimum: 5, maximum: 240, description: "Minutes available for this preparation session." },
         experience: textProperty("Participant experience level.", { enum: ["first-time", "intermediate", "experienced"] }),

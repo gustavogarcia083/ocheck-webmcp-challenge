@@ -24,6 +24,9 @@ test("outcome state keeps the next action and open loops explicit", () => {
   assert.equal(outcome.nextBestAction.id, "bike-safety");
   assert.equal(outcome.openLoops.length, 4);
   assert.ok(outcome.definitionOfDone.includes("verified"));
+  assert.match(outcome.experienceIntegration.role, /official, organizer-governed and sponsor-enabled integrator/i);
+  assert.match(outcome.experienceIntegration.replaces, /participant reconciling scattered/i);
+  assert.equal(outcome.experienceIntegration.authority, "Harbor Sports Lab (synthetic)");
 });
 
 test("a personal plan changes only the personal layer", () => {
@@ -89,6 +92,10 @@ test("sponsor value is optional, disclosed, non-purchasing, measurable, and reve
 test("commercial impact separates the event-virality and sponsor-accuracy hooks", () => {
   const store = new GuideStore();
   const impact = store.commercialImpact();
+  assert.match(impact.officialIntegration.before, /Customer as accidental integrator/i);
+  assert.match(impact.officialIntegration.after, /official, organizer-governed and sponsor-enabled experience integrator/i);
+  assert.equal(impact.officialIntegration.governedBy, "Harbor Sports Lab (synthetic)");
+  assert.deepEqual(impact.officialIntegration.integratedActors, ["organizer", "participant", "AI agent", "authorized partner"]);
   assert.equal(impact.hooks.eventVirality.rewardShares, 2480);
   assert.equal(impact.hooks.eventVirality.cleanReferredStarts, 786);
   assert.equal(impact.hooks.eventVirality.shareToStartRate, 31.7);

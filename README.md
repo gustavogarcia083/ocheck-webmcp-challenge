@@ -1,16 +1,20 @@
-# OCHECK — The Hook from Readiness to Reach
+# OCHECK — Make the Experience Official
 
 > WebMCP Challenge Edition · private development draft
 
-OCHECK is an outcome-oriented customer environment where an organization, an AI agent, and a person share the same official path. It turns unstructured intent into sequenced, source-traceable action and converts a successful customer journey into a **dual growth hook**: shareable prizes drive event virality, while contextual sponsor interactions generate high-intent signals for more accurate audience understanding.
+Every experience already has an integrator. Today, it is usually the customer—forced to reconcile emails, chats, PDFs, maps, deadlines, providers, partner offers, and last-minute changes.
+
+OCHECK changes who does that work. It becomes the **organizer-governed, official and sponsor-enabled integration layer**: one trusted experience where the organizer, an AI agent, a person, and authorized partners share the same outcome state. Unstructured inputs become sequenced, source-traceable action; verified completion then powers event virality and higher-intent sponsor signals.
+
+**OCHECK is not another touchpoint. It is the official integration layer between all of them.**
 
 ## Challenge thesis
 
-Most digital products organize information. Chats generate answers. Checklists store tasks. OCHECK organizes **intention around a verifiable result—and turns verified customer value into growth**.
+Most digital products add another touchpoint. Chats generate answers. Checklists store tasks. OCHECK integrates **every authorized touchpoint around one official, verifiable result—and turns verified customer value into growth**.
 
-The product is a value hook, not an attention trap:
+The hierarchy is deliberate:
 
-- **Customer experience first** — one official route, personal AI support, a visible next action, verified progress, useful optional value, and a prize visible from the start.
+- **Official experience first** — the customer stops acting as the accidental integrator; the organizer governs one route across rules, timing, services, personal AI support, verified progress, optional sponsored value, and reward.
 - **Hook 01 · Event virality** — verified completion unlocks a shareable Ready Pass whose clean referral starts a new guide without transferring personal progress.
 - **Hook 02 · Sponsor accuracy** — a real contextual need leads to a disclosed offer, a need-matched open, and an explicit opt-in. These signals support more accurate customer-intent understanding than impressions alone.
 
@@ -18,13 +22,14 @@ The synthetic demo does not claim demographic or predictive accuracy. It demonst
 
 The Challenge Edition demonstrates one continuous cycle:
 
-1. **Structure** — ChatGPT reads an unstructured organizer brief and stages an inspectable official guide.
-2. **Govern** — OCHECK validates outcome clarity, definition of done, phases, deadlines, evidence, sources, sponsorship disclosure, and reward logic.
-3. **Publish** — Official truth changes only after explicit organizer confirmation.
-4. **Personalize** — The agent creates a personal plan without rewriting the source.
-5. **Verify** — Completion uses visible evidence, human confirmation, audit activity, and Undo.
-6. **Create relevant value** — Sponsored actions remain optional and analytically separate from completion while explicit activations become high-intent signals.
-7. **Reward and grow** — Completing every required preparation action unlocks an OCHECK Ready Pass and a clean, measurable event-referral path.
+1. **Identify fragmentation** — ChatGPT reads the emails, chats, requirements, service proposals, and open ideas the customer would otherwise have to assemble.
+2. **Integrate** — OCHECK converts those inputs, actors, services, sponsor value, and reward into one inspectable official experience.
+3. **Govern** — OCHECK validates authority, outcome clarity, definition of done, phases, deadlines, evidence, sources, sponsorship disclosure, and reward logic.
+4. **Publish** — Official truth changes only after explicit organizer confirmation.
+5. **Personalize** — The agent creates a personal plan without rewriting the source.
+6. **Verify** — Completion uses visible evidence, human confirmation, audit activity, and Undo.
+7. **Create relevant value** — Sponsored actions remain optional and analytically separate from completion while explicit activations become high-intent signals.
+8. **Reward and grow** — Completing every required preparation action unlocks an OCHECK Ready Pass and a clean, measurable event-referral path.
 
 This is also a demonstration of how long or chaotic AI conversations can be anchored to a structured outcome state: result, definition of done, current phase, next best action, and remaining open loops.
 
@@ -46,15 +51,15 @@ The project uses generally available OpenAI and Vercel products. It does not cla
 
 ### Participant
 
-A mobile-first OCHECK guide preserves the product’s real interaction model. The participant sees the prize from the start, inspects the official source, receives a contextual plan, verifies actions, activates optional relevant value, unlocks a Ready Pass, shares through a clean referral, and can reverse the last confirmed mutation.
+A mobile-first OCHECK guide replaces the participant’s work of assembling a fragmented experience. One official source integrates rules, timing, AI assistance, verified progress, optional partner value, and a prize visible from the start. The participant can inspect sources, act, share through a clean referral, and reverse the last confirmed mutation.
 
 ### Organizer + AI
 
-The AI Guide Forge accepts real notes instead of forcing a rigid template. ChatGPT reads the brief through WebMCP, proposes a complete guide with nested structured actions, exposes assumptions and unanswered questions, and designs both ethical growth hooks: share-worthy verified rewards and optional contextual sponsor value. It validates the draft and publishes only after a second human decision.
+The AI Guide Forge accepts scattered operational inputs instead of forcing a rigid template. ChatGPT identifies touchpoints, sources, actors, services, and open loops through WebMCP, then integrates them into an organizer-governed official experience. It also designs both ethical growth hooks: share-worthy verified rewards and optional contextual sponsor value. The draft publishes only after validation and a separate human decision.
 
 ### Partner impact
 
-A synthetic dashboard separates official progress from commercial interaction. It shows readiness, impressions, need-matched opens, explicit benefit opt-ins, prize sharing, and clean referred starts. The agent returns the same hook model through `get_commercial_impact`. All figures are clearly labeled illustrative.
+A synthetic dashboard shows the value of official integration for customers, events, and partners while keeping official progress separate from commercial interaction. It reports readiness, impressions, need-matched opens, explicit benefit opt-ins, prize sharing, and clean referred starts. The agent returns the same model through `get_commercial_impact`. All figures are clearly labeled illustrative.
 
 ## What is new for the challenge
 
@@ -80,13 +85,13 @@ The top-level page registers 13 narrow tools through document.modelContext.regis
 
 | Tool | Type | Purpose |
 |---|---|---|
-| get_outcome_state | Read | Inspect the result, definition of done, phase, next action, open loops, progress, and reward. |
-| get_creation_brief | Read | Read the organizer’s unstructured notes and current draft. |
+| get_outcome_state | Read | Inspect the official integrated experience, authority, result, phase, next action, open loops, progress, sponsored utility, and reward. |
+| get_creation_brief | Read | Read the organizer’s scattered inputs, integration burden, and current draft. |
 | validate_guide_draft | Read | Validate governance, evidence, sources, sponsorship, and reward logic. |
 | get_participant_progress | Read | Inspect verified progress, readiness, remaining actions, and reward eligibility. |
 | get_sponsor_opportunities | Read | Inspect optional, disclosed partner utility and its contextual signal basis without activating it. |
-| get_commercial_impact | Read | Inspect customer experience, prize-led virality, sponsor accuracy signals, and referral metrics. |
-| stage_ai_guide_draft | Confirm + write | Stage a complete structured guide from an open brief without publishing. |
+| get_commercial_impact | Read | Inspect official integration value, prize-led virality, sponsor accuracy signals, and referral metrics. |
+| stage_ai_guide_draft | Confirm + write | Integrate scattered inputs into a proposed official experience without publishing. |
 | publish_official_guide | Confirm + write | Publish a valid staged guide as a new official version. |
 | create_personal_plan | Confirm + write | Create a contextual plan without changing official truth. |
 | complete_guide_action | Confirm + write | Verify an action and update visible progress. |
@@ -132,15 +137,17 @@ The regular interface works in any modern browser. To discover and invoke Site T
 ## Architecture
 
 ~~~text
-Unstructured brief
-        ↓
-ChatGPT + WebMCP ──→ AI Guide Forge
-        ↓                  ↓
-   narrow tools      staged + validated draft
-        ↓                  ↓
-human confirmation → Official Outcome State
+Emails + chats + PDFs + maps + services + partner proposals
                            ↓
-        Customer Experience + Sponsor Hook + Prize Hook
+               ChatGPT + WebMCP Guide Forge
+                           ↓
+               staged + validated integration
+                           ↓
+                  human confirmation
+                           ↓
+        Organizer-governed Official Experience State
+                           ↓
+       Participant journey + Sponsor Hook + Prize Hook
 ~~~
 
 The edition intentionally has no runtime dependencies or backend:
