@@ -336,7 +336,7 @@ function renderReward(state) {
     ? "Ready Pass claimed"
     : reward.status === "available"
       ? "Claim Ready Pass"
-      : "Complete preparation to unlock";
+      : "Complete preparation to earn your Ready Pass";
   $("#copy-ready-pass").hidden = reward.status !== "claimed";
 }
 

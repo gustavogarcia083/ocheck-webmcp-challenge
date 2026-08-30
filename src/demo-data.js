@@ -152,7 +152,7 @@ export const sampleGeneratedDraft = {
   reward: {
     title: "OCHECK Ready Pass",
     unlockRule: "Complete every required Before action.",
-    benefit: "Shareable proof of readiness, a synthetic recovery benefit, and a clean invitation that helps the event grow.",
+    benefit: "Shareable proof of readiness and a clean invitation that helps others begin the same official journey.",
     sponsor: "MotionLab Demo",
   },
 };
