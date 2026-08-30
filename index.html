@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#071627" />
+    <meta
+      name="description"
+      content="OCHECK turns official information into personalized, verifiable action through human-controlled WebMCP tools."
+    />
+    <title>OCHECK — Agent-Ready Official Guides</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#workspace">Skip to the guide</a>
+
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="OCHECK home">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>CHECK</span>
+      </a>
+      <div class="header-meta">
+        <span class="challenge-badge">WebMCP Challenge Edition</span>
+        <button class="quiet-button" id="reset-demo" type="button">Reset demo</button>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Official Truth → Personal Assist → Verified Progress</p>
+          <h1>One official path.<br /><span>Personalized by agents.</span><br />Controlled by people.</h1>
+          <p class="hero-description">
+            OCHECK turns trusted instructions into a shared action environment where the website, an AI agent,
+            and a person work toward the same outcome without losing authority or control.
+          </p>
+          <div class="hero-actions">
+            <a class="primary-button" href="#workspace">Explore the live guide <span aria-hidden="true">↓</span></a>
+            <button class="secondary-button" id="copy-demo-prompt" type="button">Copy winning demo prompt</button>
+          </div>
+        </div>
+
+        <div class="hero-console" aria-label="WebMCP status">
+          <div class="console-topline">
+            <span class="status-dot" id="status-dot" aria-hidden="true"></span>
+            <strong id="site-tools-status">Checking Site Tools…</strong>
+          </div>
+          <p id="site-tools-detail">The normal web experience remains fully usable while support is detected.</p>
+          <div class="tool-count"><span id="registered-tool-count">0</span><small>site tools</small></div>
+          <div class="console-flow" aria-hidden="true">
+            <span>Official source</span><i></i><span>Agent proposal</span><i></i><span>Human confirmation</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="principles" aria-label="Trust architecture">
+        <article>
+          <span class="principle-number">01</span>
+          <h2>Official Truth</h2>
+          <p>Organizer-approved information stays authoritative and versioned.</p>
+        </article>
+        <article>
+          <span class="principle-number">02</span>
+          <h2>Personal Assist</h2>
+          <p>The agent adapts priorities to context without rewriting the source.</p>
+        </article>
+        <article>
+          <span class="principle-number">03</span>
+          <h2>Verified Progress</h2>
+          <p>State-changing actions are confirmed, visible, auditable, and reversible.</p>
+        </article>
+      </section>
+
+      <section class="workspace" id="workspace">
+        <div class="workspace-heading">
+          <div>
+            <p class="eyebrow">Live synthetic demonstration</p>
+            <h2>Same guide. Two modes. One trusted state.</h2>
+          </div>
+          <div class="role-switch" aria-label="Demo role">
+            <button type="button" data-mode="participant" aria-pressed="true">Participant</button>
+            <button type="button" data-mode="organizer" aria-pressed="false">Organizer</button>
+          </div>
+        </div>
+
+        <div class="workspace-grid">
+          <section class="guide-shell" aria-labelledby="guide-title">
+            <div class="guide-header">
+              <div>
+                <div class="label-row">
+                  <span class="official-label">Official guide</span>
+                  <span class="version-label" id="guide-version">v1.0</span>
+                </div>
+                <h3 id="guide-title">Coastal 5150 — Demo Event</h3>
+                <p id="guide-meta">September 12, 2026 · Harbor Park · Demo City</p>
+              </div>
+              <div class="progress-ring" id="progress-ring" aria-label="Guide progress">
+                <strong id="progress-percent">0%</strong>
+              </div>
+            </div>
+
+            <p class="guide-outcome" id="guide-outcome"></p>
+
+            <div class="progress-summary">
+              <span><strong id="progress-completed">0</strong> of <strong id="progress-total">0</strong> required actions complete</span>
+              <button class="text-button" id="undo-action" type="button">Undo last change</button>
+            </div>
+
+            <div class="phase-tabs" role="tablist" aria-label="Guide phase">
+              <button type="button" role="tab" data-phase="all" aria-selected="true">All</button>
+              <button type="button" role="tab" data-phase="before" aria-selected="false">Before</button>
+              <button type="button" role="tab" data-phase="during" aria-selected="false">During</button>
+              <button type="button" role="tab" data-phase="after" aria-selected="false">After</button>
+            </div>
+
+            <div class="action-list" id="action-list" aria-live="polite"></div>
+          </section>
+
+          <aside class="agent-panel" aria-label="Agent-ready controls">
+            <div class="agent-panel-header">
+              <div>
+                <p class="eyebrow">Agent control center</p>
+                <h3 id="mode-title">Participant Mode</h3>
+              </div>
+              <span class="live-pill"><i aria-hidden="true"></i> Live state</span>
+            </div>
+
+            <div id="participant-panel">
+              <div class="context-card">
+                <span>Available context</span>
+                <dl>
+                  <div><dt>Experience</dt><dd id="profile-experience">First-time</dd></div>
+                  <div><dt>Available time</dt><dd id="profile-minutes">45 min</dd></div>
+                  <div><dt>Preference</dt><dd id="profile-accessibility">Low-impact transitions</dd></div>
+                </dl>
+              </div>
+
+              <button class="primary-button full-width" id="create-plan" type="button">Create a 45-minute personal plan</button>
+
+              <div class="personal-plan" id="personal-plan">
+                <div class="empty-state">
+                  <span aria-hidden="true">✦</span>
+                  <p>The agent can prioritize official actions here without changing the guide.</p>
+                </div>
+              </div>
+            </div>
+
+            <div id="organizer-panel" hidden>
+              <div class="context-card">
+                <span>Publication controls</span>
+                <dl>
+                  <div><dt>Official version</dt><dd id="organizer-version">1.0</dd></div>
+                  <div><dt>Pending review</dt><dd id="pending-count">0 changes</dd></div>
+                  <div><dt>Validation</dt><dd id="validation-status">Ready</dd></div>
+                </dl>
+              </div>
+              <div class="organizer-actions">
+                <button class="secondary-button full-width" id="propose-sample" type="button">Propose a sample official action</button>
+                <button class="secondary-button full-width" id="validate-guide" type="button">Validate official guide</button>
+                <button class="primary-button full-width" id="publish-changes" type="button">Review and publish changes</button>
+              </div>
+              <div class="pending-list" id="pending-list"></div>
+            </div>
+
+            <section class="prompt-section" aria-labelledby="prompt-heading">
+              <div class="section-title-row">
+                <h4 id="prompt-heading">Try asking the agent</h4>
+                <span>Copy prompt</span>
+              </div>
+              <div class="prompt-list" id="prompt-list"></div>
+            </section>
+
+            <section class="audit-section" aria-labelledby="audit-heading">
+              <div class="section-title-row">
+                <h4 id="audit-heading">Recent verified activity</h4>
+                <span>Auditable</span>
+              </div>
+              <ol id="audit-list"></ol>
+            </section>
+          </aside>
+        </div>
+      </section>
+
+      <section class="commerce-story">
+        <div>
+          <p class="eyebrow">From interruption to utility</p>
+          <h2>Sponsors earn relevance by helping complete a real step.</h2>
+        </div>
+        <p>
+          Partner actions are optional, clearly disclosed, organizer-approved, and separated from official truth.
+          The demo never makes a purchase or leaves the page without the person’s choice.
+        </p>
+      </section>
+
+      <section class="tool-catalog" aria-labelledby="tool-catalog-title">
+        <div class="tool-catalog-heading">
+          <div>
+            <p class="eyebrow">Structured action vocabulary</p>
+            <h2 id="tool-catalog-title">Eleven narrow tools, not a thousand blind clicks.</h2>
+          </div>
+          <p>Read tools inspect trusted state. Write tools preview their effect and wait for human confirmation.</p>
+        </div>
+        <div class="tool-grid" id="tool-grid"></div>
+      </section>
+    </main>
+
+    <footer>
+      <a class="brand inverse" href="#top" aria-label="OCHECK home"><span class="brand-mark"></span><span>CHECK</span></a>
+      <p>Challenge Edition · Synthetic data · Human-controlled actions</p>
+      <a href="https://learn.chatgpt.com/docs/webmcp" rel="noreferrer">WebMCP documentation ↗</a>
+    </footer>
+
+    <div class="modal-backdrop" id="confirmation-modal" hidden>
+      <section class="confirmation-modal" role="dialog" aria-modal="true" aria-labelledby="confirmation-title">
+        <p class="eyebrow" id="confirmation-eyebrow">Human confirmation</p>
+        <h2 id="confirmation-title">Confirm this action?</h2>
+        <p id="confirmation-summary"></p>
+        <details>
+          <summary>Inspect proposed data</summary>
+          <pre id="confirmation-details"></pre>
+        </details>
+        <div class="modal-actions">
+          <button class="secondary-button" id="confirmation-cancel" type="button">Cancel</button>
+          <button class="primary-button" id="confirmation-approve" type="button">Confirm</button>
+        </div>
+      </section>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+    <noscript>
+      <div class="noscript">OCHECK needs JavaScript to run the interactive guide and register WebMCP tools.</div>
+    </noscript>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
