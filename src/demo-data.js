@@ -153,7 +153,6 @@ export const sampleGeneratedDraft = {
     title: "OCHECK Ready Pass",
     unlockRule: "Complete every required Before action.",
     benefit: "Shareable proof of readiness and a clean invitation that helps others begin the same official journey.",
-    sponsor: "MotionLab Demo",
   },
 };
 
@@ -193,7 +192,6 @@ export const initialState = {
     status: "locked",
     unlockRule: sampleGeneratedDraft.readyPass.unlockRule,
     benefit: sampleGeneratedDraft.readyPass.benefit,
-    sponsor: sampleGeneratedDraft.readyPass.sponsor,
     code: null,
     referralCode: null,
     claimedAt: null,

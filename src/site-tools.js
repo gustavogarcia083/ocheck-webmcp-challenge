@@ -170,7 +170,6 @@ export function buildSiteTools({ store, confirmAction }) {
           title: textProperty("Name of the shareable Ready Pass."),
           unlockRule: textProperty("Exact verified condition that unlocks it."),
           benefit: textProperty("Satisfaction, recognition, and sharing value delivered to the participant."),
-          sponsor: textProperty("Optional synthetic or authorized supporting partner."),
         }, ["title", "unlockRule", "benefit"]),
       }, ["title", "organizer", "outcome", "definitionOfDone", "eventDate", "location", "sourceLabel", "actions", "readyPass"]),
       execute: async (input) => {
