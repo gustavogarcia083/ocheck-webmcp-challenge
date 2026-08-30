@@ -11,6 +11,59 @@ function makeId(prefix) {
   return `${prefix}-${suffix}`;
 }
 
+function slugify(value) {
+  return String(value)
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 48) || makeId("action");
+}
+
+function versionAfter(version) {
+  const [major = 1, minor = 0] = String(version || "1.0").split(".").map(Number);
+  return `${Number.isFinite(major) ? major : 1}.${Number.isFinite(minor) ? minor + 1 : 1}`;
+}
+
+function normalizeAction(action, index, seenIds) {
+  const baseId = slugify(action.id || action.title || `action-${index + 1}`);
+  let id = baseId;
+  let suffix = 2;
+  while (seenIds.has(id)) {
+    id = `${baseId}-${suffix}`;
+    suffix += 1;
+  }
+  seenIds.add(id);
+
+  const sponsored = action.sponsored
+    ? {
+        partner: String(action.sponsored.partner || "").trim(),
+        category: String(action.sponsored.category || "Contextual value").trim(),
+        disclosure: String(action.sponsored.disclosure || "").trim(),
+        headline: String(action.sponsored.headline || action.title || "").trim(),
+        value: String(action.sponsored.value || "").trim(),
+        ctaLabel: String(action.sponsored.ctaLabel || "Activate benefit").trim(),
+        terms: String(action.sponsored.terms || "").trim(),
+      }
+    : undefined;
+
+  return {
+    id,
+    phase: String(action.phase || "before"),
+    title: String(action.title || "").trim(),
+    description: String(action.description || "").trim(),
+    deadline: String(action.deadline || "").trim(),
+    estimatedMinutes: Number(action.estimatedMinutes || 5),
+    required: Boolean(action.required),
+    critical: Boolean(action.critical),
+    official: !sponsored,
+    completionEvidence: String(action.completionEvidence || "").trim(),
+    sourceRef: String(action.sourceRef || "").trim(),
+    ...(sponsored ? { sponsored } : {}),
+  };
+}
+
 export class GuideStore {
   constructor(seed = freshInitialState()) {
     this.state = clone(seed);
@@ -33,10 +86,18 @@ export class GuideStore {
   }
 
   setMode(mode) {
-    if (!['participant', 'organizer'].includes(mode)) throw new Error("Mode must be participant or organizer.");
+    if (!["participant", "organizer", "impact"].includes(mode)) {
+      throw new Error("Mode must be participant, organizer, or impact.");
+    }
     this.state.mode = mode;
     this.emit();
     return { mode };
+  }
+
+  updateBrief(raw) {
+    this.state.brief.raw = String(raw || "");
+    this.state.brief.updatedAt = new Date().toISOString();
+    return { characters: this.state.brief.raw.length };
   }
 
   reset() {
@@ -56,45 +117,226 @@ export class GuideStore {
     };
   }
 
-  listActions({ phase = "all", query = "", requiredOnly = false } = {}) {
-    const needle = query.trim().toLowerCase();
-    return this.state.guide.actions
-      .filter((action) => phase === "all" || action.phase === phase)
-      .filter((action) => !requiredOnly || action.required)
-      .filter((action) => !needle || `${action.title} ${action.description}`.toLowerCase().includes(needle))
-      .sort((a, b) => PHASE_ORDER[a.phase] - PHASE_ORDER[b.phase]);
-  }
-
-  validateGuide() {
-    const issues = [];
-    const ids = new Set();
-    for (const action of this.state.guide.actions) {
-      if (ids.has(action.id)) issues.push({ severity: "error", actionId: action.id, message: "Duplicate action id." });
-      ids.add(action.id);
-      if (action.critical && !action.deadline) {
-        issues.push({ severity: "error", actionId: action.id, message: "Critical action needs a deadline." });
-      }
-      if (action.sponsored && !action.sponsored.disclosure) {
-        issues.push({ severity: "error", actionId: action.id, message: "Sponsored action needs a disclosure." });
-      }
-      if (!action.title?.trim() || !action.description?.trim()) {
-        issues.push({ severity: "error", actionId: action.id, message: "Every action needs a title and description." });
-      }
-    }
-    for (const phase of Object.keys(PHASE_ORDER)) {
-      if (!this.state.guide.actions.some((action) => action.phase === phase)) {
-        issues.push({ severity: "warning", message: `The guide has no ${phase} actions.` });
-      }
-    }
+  readiness() {
+    const required = this.state.guide.actions.filter((action) => action.required && action.phase === "before");
+    const completed = required.filter((action) => this.state.completedActionIds.includes(action.id));
+    const percent = required.length ? Math.round((completed.length / required.length) * 100) : 0;
     return {
-      valid: !issues.some((issue) => issue.severity === "error"),
-      issues,
-      checkedActions: this.state.guide.actions.length,
-      pendingChanges: this.state.pendingChanges.length,
+      completed: completed.length,
+      total: required.length,
+      percent,
+      status: percent === 100 ? "ready" : "in_progress",
+      rewardStatus: this.state.reward.status,
     };
   }
 
-  createPersonalPlan({ availableMinutes, experience, accessibilityNeeds = "" }) {
+  listActions({ phase = "all", query = "", requiredOnly = false } = {}) {
+    const needle = String(query).trim().toLowerCase();
+    return this.state.guide.actions
+      .filter((action) => phase === "all" || action.phase === phase)
+      .filter((action) => !requiredOnly || action.required)
+      .filter((action) => !needle || `${action.title} ${action.description} ${action.sourceRef}`.toLowerCase().includes(needle))
+      .sort((a, b) => PHASE_ORDER[a.phase] - PHASE_ORDER[b.phase]);
+  }
+
+  outcomeState() {
+    const actions = this.state.guide.actions;
+    const openRequired = actions
+      .filter((action) => action.required && !this.state.completedActionIds.includes(action.id))
+      .sort((a, b) => Number(b.critical) - Number(a.critical) || PHASE_ORDER[a.phase] - PHASE_ORDER[b.phase]);
+    const nextBestAction = openRequired[0] || null;
+    const readiness = this.readiness();
+    const currentPhase = readiness.percent < 100
+      ? "before"
+      : openRequired.find((action) => action.phase === "during")
+        ? "during"
+        : openRequired.length
+          ? "after"
+          : "complete";
+    return {
+      outcome: this.state.guide.outcome,
+      definitionOfDone: this.state.guide.definitionOfDone,
+      currentPhase,
+      nextBestAction,
+      openLoops: openRequired.map((action) => ({
+        id: action.id,
+        title: action.title,
+        phase: action.phase,
+        critical: action.critical,
+        deadline: action.deadline,
+      })),
+      readiness,
+      progress: this.progress(),
+      personalPlan: clone(this.state.personalPlan),
+      reward: clone(this.state.reward),
+      guideVersion: this.state.guide.version,
+    };
+  }
+
+  validateDraft(draft = this.state.creation.draft) {
+    if (!draft) {
+      return {
+        valid: false,
+        score: 0,
+        issues: [{ severity: "error", field: "draft", message: "No AI-generated draft has been staged." }],
+        checkedActions: 0,
+      };
+    }
+
+    const issues = [];
+    if (!draft.title?.trim()) issues.push({ severity: "error", field: "title", message: "The guide needs a title." });
+    if (!draft.outcome?.trim()) issues.push({ severity: "error", field: "outcome", message: "The guide needs an explicit outcome." });
+    if (!draft.definitionOfDone?.trim()) {
+      issues.push({ severity: "error", field: "definitionOfDone", message: "The outcome needs a definition of done." });
+    }
+    if (!draft.sourceLabel?.trim()) {
+      issues.push({ severity: "error", field: "sourceLabel", message: "The official source must be identified." });
+    }
+    if (!Array.isArray(draft.actions) || !draft.actions.length) {
+      issues.push({ severity: "error", field: "actions", message: "The guide needs at least one action." });
+    }
+
+    const ids = new Set();
+    for (const action of draft.actions || []) {
+      if (ids.has(action.id)) issues.push({ severity: "error", actionId: action.id, message: "Duplicate action id." });
+      ids.add(action.id);
+      if (!Object.hasOwn(PHASE_ORDER, action.phase)) {
+        issues.push({ severity: "error", actionId: action.id, message: "Action phase must be before, during, or after." });
+      }
+      if (!action.title?.trim() || !action.description?.trim()) {
+        issues.push({ severity: "error", actionId: action.id, message: "Every action needs a title and instruction." });
+      }
+      if (action.critical && !action.deadline?.trim()) {
+        issues.push({ severity: "error", actionId: action.id, message: "Critical actions need a deadline." });
+      }
+      if (!action.completionEvidence?.trim()) {
+        issues.push({ severity: "error", actionId: action.id, message: "Every action needs verifiable completion evidence." });
+      }
+      if (!action.sourceRef?.trim()) {
+        issues.push({ severity: "error", actionId: action.id, message: "Every action must trace to a source." });
+      }
+      if (action.sponsored) {
+        if (!action.sponsored.partner || !action.sponsored.disclosure || !action.sponsored.value || !action.sponsored.terms) {
+          issues.push({ severity: "error", actionId: action.id, message: "Sponsored actions need partner, disclosure, value, and terms." });
+        }
+        if (action.required) {
+          issues.push({ severity: "error", actionId: action.id, message: "A sponsored action cannot be required." });
+        }
+      }
+    }
+
+    for (const phase of Object.keys(PHASE_ORDER)) {
+      if (!(draft.actions || []).some((action) => action.phase === phase)) {
+        issues.push({ severity: phase === "before" ? "error" : "warning", field: "actions", message: `The guide has no ${phase} actions.` });
+      }
+    }
+    if (!draft.reward?.title || !draft.reward?.unlockRule || !draft.reward?.benefit) {
+      issues.push({ severity: "error", field: "reward", message: "The result needs a named reward, unlock rule, and user benefit." });
+    }
+    for (const question of draft.openQuestions || []) {
+      if (String(question).trim()) issues.push({ severity: "warning", field: "openQuestions", message: String(question).trim() });
+    }
+
+    const errors = issues.filter((issue) => issue.severity === "error").length;
+    const warnings = issues.filter((issue) => issue.severity === "warning").length;
+    return {
+      valid: errors === 0,
+      score: Math.max(0, 100 - errors * 15 - warnings * 4),
+      issues,
+      errors,
+      warnings,
+      checkedActions: draft.actions?.length || 0,
+      sponsorOpportunities: (draft.actions || []).filter((action) => action.sponsored).length,
+    };
+  }
+
+  validateOfficialGuide() {
+    return this.validateDraft({
+      ...this.state.guide,
+      reward: this.state.reward,
+      openQuestions: [],
+    });
+  }
+
+  stageGeneratedGuide(input) {
+    if (this.state.mode !== "organizer") throw new Error("Switch to Organizer + AI before staging an official guide.");
+    const seenIds = new Set();
+    const draft = {
+      title: String(input.title || "").trim(),
+      organizer: String(input.organizer || "").trim(),
+      outcome: String(input.outcome || "").trim(),
+      definitionOfDone: String(input.definitionOfDone || "").trim(),
+      eventDate: String(input.eventDate || "").trim(),
+      location: String(input.location || "").trim(),
+      sourceLabel: String(input.sourceLabel || this.state.brief.source || "").trim(),
+      actions: Array.isArray(input.actions) ? input.actions.map((action, index) => normalizeAction(action, index, seenIds)) : [],
+      assumptions: Array.isArray(input.assumptions) ? input.assumptions.map(String).filter(Boolean) : [],
+      openQuestions: Array.isArray(input.openQuestions) ? input.openQuestions.map(String).filter(Boolean) : [],
+      reward: {
+        title: String(input.reward?.title || "").trim(),
+        unlockRule: String(input.reward?.unlockRule || "").trim(),
+        benefit: String(input.reward?.benefit || "").trim(),
+        sponsor: String(input.reward?.sponsor || "").trim(),
+      },
+      stagedAt: new Date().toISOString(),
+      generatedFromBriefId: this.state.brief.id,
+    };
+    return this.mutate("ai_guide_staged", `Staged AI-generated guide “${draft.title || "Untitled"}”`, () => {
+      this.state.creation.draft = draft;
+      this.state.creation.validation = null;
+      return { status: "staged", draft: clone(draft), validation: this.validateDraft(draft) };
+    }, "agent proposal · human confirmed");
+  }
+
+  publishDraft() {
+    if (this.state.mode !== "organizer") throw new Error("Switch to Organizer + AI before publishing.");
+    const draft = this.state.creation.draft;
+    if (!draft) throw new Error("Stage an AI-generated guide before publishing.");
+    const validation = this.validateDraft(draft);
+    if (!validation.valid) throw new Error("Resolve every blocking validation issue before publishing.");
+
+    return this.mutate("official_guide_published", `Published AI-generated guide “${draft.title}”`, () => {
+      const previousCompleted = new Set(this.state.completedActionIds);
+      this.state.guide = {
+        id: this.state.guide.id,
+        title: draft.title,
+        organizer: draft.organizer,
+        outcome: draft.outcome,
+        definitionOfDone: draft.definitionOfDone,
+        eventDate: draft.eventDate,
+        location: draft.location,
+        sourceLabel: draft.sourceLabel,
+        status: "published",
+        version: versionAfter(this.state.guide.version),
+        updatedAt: new Date().toISOString(),
+        actions: clone(draft.actions),
+      };
+      this.state.completedActionIds = draft.actions.filter((action) => previousCompleted.has(action.id)).map((action) => action.id);
+      this.state.personalPlan = [];
+      this.state.sponsorEngagements = [];
+      this.state.reward = {
+        id: `ready-pass-${slugify(draft.title)}`,
+        title: draft.reward.title,
+        status: "locked",
+        unlockRule: draft.reward.unlockRule,
+        benefit: draft.reward.benefit,
+        sponsor: draft.reward.sponsor,
+        code: null,
+        referralCode: null,
+        claimedAt: null,
+      };
+      if (this.readiness().percent === 100) this.state.reward.status = "available";
+      return {
+        status: "published",
+        version: this.state.guide.version,
+        actions: this.state.guide.actions.length,
+        preservedCompletions: this.state.completedActionIds.length,
+        validation,
+      };
+    }, "organizer · human confirmed");
+  }
+
+  createPersonalPlan({ availableMinutes, experience, accessibilityNeeds = "", includeSponsored = false }) {
     const minutes = Number(availableMinutes);
     if (!Number.isFinite(minutes) || minutes < 5 || minutes > 240) {
       throw new Error("availableMinutes must be between 5 and 240.");
@@ -104,7 +346,8 @@ export class GuideStore {
 
     const candidates = this.state.guide.actions
       .filter((action) => !this.state.completedActionIds.includes(action.id))
-      .sort((a, b) => Number(b.critical) - Number(a.critical) || Number(b.required) - Number(a.required));
+      .filter((action) => !action.sponsored || includeSponsored)
+      .sort((a, b) => Number(b.critical) - Number(a.critical) || Number(b.required) - Number(a.required) || PHASE_ORDER[a.phase] - PHASE_ORDER[b.phase]);
 
     let remaining = minutes;
     const selected = [];
@@ -118,13 +361,15 @@ export class GuideStore {
     return this.mutate("personal_plan_created", `Created a ${minutes}-minute personal plan`, () => {
       this.state.participant.availableMinutes = minutes;
       this.state.participant.experience = experience;
-      this.state.participant.accessibilityNeeds = accessibilityNeeds.trim();
+      this.state.participant.accessibilityNeeds = String(accessibilityNeeds).trim();
       this.state.personalPlan = selected;
       return {
+        status: "created",
         actionIds: selected,
         selectedActions: selected.map((id) => this.state.guide.actions.find((action) => action.id === id)),
         availableMinutes: minutes,
         unusedMinutes: remaining,
+        officialGuideChanged: false,
       };
     });
   }
@@ -133,73 +378,87 @@ export class GuideStore {
     const action = this.state.guide.actions.find((candidate) => candidate.id === actionId);
     if (!action) throw new Error(`Unknown action: ${actionId}`);
     if (this.state.completedActionIds.includes(actionId)) {
-      return { status: "already_completed", actionId, progress: this.progress() };
+      return { status: "already_completed", actionId, progress: this.progress(), readiness: this.readiness() };
     }
+
+    const rewardWasLocked = this.state.reward.status === "locked";
     return this.mutate("action_completed", `Completed “${action.title}”`, () => {
       this.state.completedActionIds.push(actionId);
-      return { status: "completed", actionId, title: action.title, progress: this.progress() };
-    });
-  }
-
-  proposeGuideAction({ title, description, phase, required = true, estimatedMinutes = 5 }) {
-    if (this.state.mode !== "organizer") throw new Error("Switch to Organizer Mode before proposing official changes.");
-    if (!title?.trim() || !description?.trim()) throw new Error("A proposal needs a title and description.");
-    if (!Object.hasOwn(PHASE_ORDER, phase)) throw new Error("phase must be before, during, or after.");
-    const minutes = Number(estimatedMinutes);
-    if (!Number.isFinite(minutes) || minutes < 1 || minutes > 120) throw new Error("estimatedMinutes must be 1–120.");
-
-    const proposal = {
-      id: makeId("proposal"),
-      operation: "add_action",
-      action: {
-        id: makeId("official"),
-        title: title.trim(),
-        description: description.trim(),
-        phase,
-        deadline: "To be confirmed by organizer",
-        estimatedMinutes: minutes,
-        required: Boolean(required),
-        critical: false,
-        official: true,
-      },
-      status: "pending",
-    };
-    return this.mutate("guide_change_proposed", `Proposed official action “${proposal.action.title}”`, () => {
-      this.state.pendingChanges.push(proposal);
-      return clone(proposal);
-    });
-  }
-
-  publishGuideChanges() {
-    if (this.state.mode !== "organizer") throw new Error("Switch to Organizer Mode before publishing.");
-    if (!this.state.pendingChanges.length) return { status: "nothing_to_publish", published: 0 };
-    const validation = this.validateGuide();
-    if (!validation.valid) throw new Error("Resolve validation errors before publishing.");
-    const count = this.state.pendingChanges.length;
-    return this.mutate("guide_changes_published", `Published ${count} approved guide change${count === 1 ? "" : "s"}`, () => {
-      for (const change of this.state.pendingChanges) {
-        if (change.operation === "add_action") this.state.guide.actions.push(change.action);
+      const readiness = this.readiness();
+      let rewardUnlocked = false;
+      if (rewardWasLocked && readiness.percent === 100) {
+        this.state.reward.status = "available";
+        this.state.impact.readyPasses += 1;
+        rewardUnlocked = true;
       }
-      this.state.pendingChanges = [];
-      const [major, minor] = this.state.guide.version.split(".").map(Number);
-      this.state.guide.version = `${major}.${minor + 1}`;
-      this.state.guide.updatedAt = new Date().toISOString();
-      return { status: "published", published: count, version: this.state.guide.version };
+      return {
+        status: "completed",
+        actionId,
+        title: action.title,
+        progress: this.progress(),
+        readiness: this.readiness(),
+        rewardUnlocked,
+        reward: clone(this.state.reward),
+      };
     });
   }
 
-  recordSponsorInterest(actionId) {
+  activateSponsorBenefit(actionId) {
     const action = this.state.guide.actions.find((candidate) => candidate.id === actionId && candidate.sponsored);
-    if (!action) throw new Error("The selected action is not a disclosed sponsored action.");
-    return this.mutate("sponsor_action_selected", `Selected optional partner action “${action.title}”`, () => {
-      if (!this.state.sponsorEngagements.includes(actionId)) this.state.sponsorEngagements.push(actionId);
-      return {
-        status: "selected",
+    if (!action) throw new Error("The selected action is not a disclosed sponsored opportunity.");
+    const existing = this.state.sponsorEngagements.find((entry) => entry.actionId === actionId);
+    if (existing) return { status: "already_activated", ...clone(existing) };
+
+    return this.mutate("sponsor_benefit_activated", `Activated optional partner benefit “${action.title}”`, () => {
+      const engagement = {
         actionId,
         partner: action.sponsored.partner,
         disclosure: action.sponsored.disclosure,
+        value: action.sponsored.value,
+        status: "activated",
+        demoCode: "MOTION-DEMO-15",
+        activatedAt: new Date().toISOString(),
+        purchaseMade: false,
+      };
+      this.state.sponsorEngagements.push(engagement);
+      this.state.impact.sponsorActivations += 1;
+      return { status: "activated", ...clone(engagement) };
+    });
+  }
+
+  claimReadinessReward() {
+    if (this.state.reward.status === "locked") {
+      throw new Error("Complete every required Before action before claiming the Ready Pass.");
+    }
+    if (this.state.reward.status === "claimed") {
+      return { status: "already_claimed", reward: clone(this.state.reward) };
+    }
+    return this.mutate("readiness_reward_claimed", `Claimed “${this.state.reward.title}”`, () => {
+      this.state.reward.status = "claimed";
+      this.state.reward.code = "READY-5150-DEMO";
+      this.state.reward.referralCode = "ready-coastal-5150";
+      this.state.reward.claimedAt = new Date().toISOString();
+      return {
+        status: "claimed",
+        reward: clone(this.state.reward),
+        referralPath: "/?ref=ready-coastal-5150&utm_source=ocheck_ready_pass",
+        createsNewRecipientState: true,
       };
     });
+  }
+
+  commercialImpact() {
+    const impact = clone(this.state.impact);
+    const percent = (part, whole) => (whole ? Math.round((part / whole) * 1000) / 10 : 0);
+    return {
+      ...impact,
+      readinessRate: percent(impact.readyPasses, impact.activeParticipants),
+      sponsorOpenRate: percent(impact.sponsorActionOpens, impact.sponsorImpressions),
+      sponsorActivationRate: percent(impact.sponsorActivations, impact.sponsorActionOpens),
+      rewardReferralRate: percent(impact.referredStarts, impact.rewardShares),
+      disclosure: "All dashboard figures are synthetic challenge data.",
+      currentDemoEngagements: clone(this.state.sponsorEngagements),
+    };
   }
 
   undoLastMutation() {
@@ -214,17 +473,24 @@ export class GuideStore {
       summary: `Undid: ${entry.summary}`,
     });
     this.emit();
-    return { status: "undone", kind: entry.kind, summary: entry.summary, progress: this.progress() };
+    return {
+      status: "undone",
+      kind: entry.kind,
+      summary: entry.summary,
+      progress: this.progress(),
+      readiness: this.readiness(),
+      reward: clone(this.state.reward),
+    };
   }
 
-  mutate(kind, summary, operation) {
+  mutate(kind, summary, operation, actor = "human-confirmed action") {
     const snapshot = clone(this.state);
     const result = operation();
     this.undoStack.push({ kind, summary, snapshot });
     this.state.audit.unshift({
       id: makeId("audit"),
       at: new Date().toISOString(),
-      actor: "human-confirmed action",
+      actor,
       kind,
       summary,
     });

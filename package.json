@@ -1,9 +1,9 @@
 {
   "name": "ocheck-webmcp-challenge",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
-  "description": "A dependency-free WebMCP Challenge Edition of OCHECK.",
+  "description": "OCHECK WebMCP Challenge Edition: from unstructured intent to verified outcomes.",
   "scripts": {
     "dev": "node scripts/serve.mjs",
     "test": "node --test",
