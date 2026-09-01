@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f7f4ec" />
+    <meta
+      name="description"
+      content="OCHECK replaces the customer as the accidental integrator of fragmented event touchpoints, becoming the organizer-governed, official and sponsor-enabled experience layer."
+    />
+    <title>OCHECK — Make the Experience Official</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#experience">Skip to the live experience</a>
+
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="OCHECK home">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>CHECK</span>
+      </a>
+
+      <nav class="header-nav" aria-label="Challenge perspectives">
+        <button type="button" data-mode="participant" aria-pressed="true">Participant</button>
+        <button type="button" data-mode="organizer" aria-pressed="false">Organizer + AI</button>
+        <button type="button" data-mode="impact" aria-pressed="false">Partner impact</button>
+      </nav>
+
+      <div class="header-actions">
+        <span class="site-tools-pill" title="WebMCP status">
+          <i id="status-dot" aria-hidden="true"></i>
+          <strong id="site-tools-status">Checking Site Tools…</strong>
+          <span><b id="registered-tool-count">0</b> tools</span>
+        </span>
+        <button class="quiet-button" id="reset-demo" type="button">Reset demo</button>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Every experience already has an integrator</p>
+          <h1>It should not be<br />the customer. <span>Make it official.</span></h1>
+          <p class="hero-description">
+            Without OCHECK, participants must piece together emails, chats, PDFs, maps, deadlines, services, sponsor offers,
+            and achievement moments. OCHECK becomes the official, organizer-governed and sponsor-enabled integrator: one trusted
+            experience that guides every action, verifies progress, and turns completion into value and growth.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#experience">Experience OCHECK <span aria-hidden="true">↓</span></a>
+            <button class="button secondary" id="copy-demo-prompt" type="button">Copy complete demo prompt</button>
+          </div>
+        </div>
+
+        <div class="outcome-protocol" aria-label="OCHECK official experience protocol">
+          <div class="protocol-head">
+            <span>OCHECK Official Experience Protocol</span>
+            <strong>One governed layer</strong>
+          </div>
+          <ol>
+            <li><span>01</span><div><strong>Authorize</strong><small>Organizer → official truth</small></div></li>
+            <li><span>02</span><div><strong>Integrate</strong><small>Rules + timing + services</small></div></li>
+            <li><span>03</span><div><strong>Guide</strong><small>Person + agent → one path</small></div></li>
+            <li><span>04</span><div><strong>Grow</strong><small>Satisfaction + sponsor hooks</small></div></li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="hook-engine" aria-labelledby="hook-engine-title">
+        <header>
+          <p class="eyebrow">The official integration layer</p>
+          <h2 id="hook-engine-title">From scattered touchpoints to one official experience.</h2>
+          <p>
+            OCHECK changes who does the integrating. The participant stops reconciling disconnected sources; the organizer
+            governs one path; AI and authorized partners work inside it.
+          </p>
+        </header>
+        <div class="hook-grid">
+          <article>
+            <span>Without OCHECK</span>
+            <strong>The customer becomes the accidental integrator.</strong>
+            <p>Emails + chats + PDFs + maps + vendors + last-minute changes become confusion, missed steps, and invisible friction.</p>
+          </article>
+          <article class="experience-hook">
+            <span>With OCHECK</span>
+            <strong>One official, organizer-governed experience.</strong>
+            <p>Official truth + AI assistance + verified progress + relevant sponsored utility + shareable achievement—in one live path.</p>
+          </article>
+          <article>
+            <span>Official value engine</span>
+            <strong>One trusted path. Two growth hooks.</strong>
+            <p>A shareable Ready Pass turns satisfaction into event reach; contextual, explicit opt-ins create stronger sponsor-intent signals.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="experience" id="experience">
+        <div class="experience-heading">
+          <div>
+            <p class="eyebrow">Live synthetic demonstration</p>
+            <h2>One official experience. Three perspectives. Thirteen meaningful tools.</h2>
+          </div>
+          <div class="role-switch" aria-label="Select a perspective">
+            <button type="button" data-mode="participant" aria-pressed="true">
+              <span>01</span> Participant
+            </button>
+            <button type="button" data-mode="organizer" aria-pressed="false">
+              <span>02</span> Organizer + AI
+            </button>
+            <button type="button" data-mode="impact" aria-pressed="false">
+              <span>03</span> Partner impact
+            </button>
+          </div>
+        </div>
+
+        <section class="mode-view participant-view" data-view="participant">
+          <div class="participant-layout">
+            <section class="phone-shell" aria-labelledby="guide-title">
+              <div class="phone-topbar" aria-hidden="true">
+                <span>9:41</span>
+                <div><i></i><i></i><i></i></div>
+              </div>
+              <div class="guide-header">
+                <a class="brand compact" href="#top" aria-label="OCHECK home">
+                  <span class="brand-mark" aria-hidden="true"></span><span>CHECK</span>
+                </a>
+                <span class="official-label">Official guide</span>
+              </div>
+
+              <div class="guide-intro">
+                <div class="guide-label-row">
+                  <span id="guide-version">v1.0</span>
+                  <button class="reward-chip locked" id="reward-chip" type="button">Ready Pass · Locked</button>
+                </div>
+                <h3 id="guide-title">Coastal 5150 — Official Preparation Guide</h3>
+                <p class="guide-meta" id="guide-meta">September 12, 2026 · Harbor Park · Demo City</p>
+                <p class="guide-outcome" id="guide-outcome"></p>
+              </div>
+
+              <div class="official-experience-strip">
+                <span>Official experience</span>
+                <strong>Rules + timing + AI help + partner value + achievement</strong>
+              </div>
+
+              <section class="reward-teaser" aria-labelledby="reward-teaser-title">
+                <span class="reward-teaser-mark" aria-hidden="true">✓</span>
+                <div>
+                  <small>Your achievement, visible from the start</small>
+                  <strong id="reward-teaser-title">Finish ready. Earn it. Share it.</strong>
+                  <p id="reward-teaser-benefit"></p>
+                </div>
+                <button id="preview-reward" type="button">Preview Ready Pass</button>
+              </section>
+
+              <div class="readiness-card">
+                <div class="readiness-copy">
+                  <div>
+                    <span>Preparation readiness</span>
+                    <strong><b id="readiness-completed">0</b> of <b id="readiness-total">0</b> verified</strong>
+                  </div>
+                  <strong id="readiness-percent">0%</strong>
+                </div>
+                <div class="progress-track"><i id="readiness-fill"></i></div>
+                <small><span id="overall-progress">0 of 0</span> required actions across the complete journey</small>
+              </div>
+
+              <div class="ready-banner" id="ready-banner" hidden>
+                <div>
+                  <small>Verified preparation complete</small>
+                  <strong id="ready-banner-title">Your OCHECK Ready Pass is available.</strong>
+                </div>
+                <button type="button" id="open-reward">Open Ready Pass</button>
+              </div>
+
+              <div class="phase-tabs" role="tablist" aria-label="Guide phase">
+                <button type="button" role="tab" data-phase="all" aria-selected="true">All</button>
+                <button type="button" role="tab" data-phase="before" aria-selected="false">Before</button>
+                <button type="button" role="tab" data-phase="during" aria-selected="false">During</button>
+                <button type="button" role="tab" data-phase="after" aria-selected="false">After</button>
+              </div>
+
+              <div class="action-list" id="action-list" aria-live="polite"></div>
+              <button class="button primary full-width guide-next" id="guide-next" type="button">Continue with what’s next <span>›</span></button>
+            </section>
+
+            <aside class="copilot-panel" aria-label="OCHECK Outcome Copilot">
+              <header class="panel-heading">
+                <div>
+                  <p class="eyebrow">Outcome Copilot</p>
+                  <h3>One official state. No loose ends.</h3>
+                </div>
+                <span class="live-state"><i></i> Same official state</span>
+              </header>
+
+              <section class="outcome-contract" aria-labelledby="outcome-contract-title">
+                <div class="section-title-row">
+                  <h4 id="outcome-contract-title">Official outcome contract</h4>
+                  <span id="current-phase">Before</span>
+                </div>
+                <dl>
+                  <div>
+                    <dt>Result</dt>
+                    <dd id="outcome-result"></dd>
+                  </div>
+                  <div>
+                    <dt>Definition of done</dt>
+                    <dd id="definition-done"></dd>
+                  </div>
+                  <div class="next-best">
+                    <dt>Next best action</dt>
+                    <dd id="next-action"></dd>
+                  </div>
+                </dl>
+              </section>
+
+              <section class="participant-context">
+                <div class="section-title-row">
+                  <h4>Personal context</h4>
+                  <span>Personal layer · official truth preserved</span>
+                </div>
+                <div class="context-grid">
+                  <div><span>Experience</span><strong id="profile-experience">First-time</strong></div>
+                  <div><span>Available now</span><strong id="profile-minutes">25 min</strong></div>
+                  <div><span>Preference</span><strong id="profile-accessibility">Concise guidance</strong></div>
+                </div>
+                <button class="button dark full-width" id="create-plan" type="button">Create my personal action plan</button>
+                <div class="personal-plan" id="personal-plan"></div>
+              </section>
+
+              <section class="prompt-section">
+                <div class="section-title-row">
+                  <h4>Ask ChatGPT</h4>
+                  <span>Each prompt uses Site Tools</span>
+                </div>
+                <div class="prompt-list" id="participant-prompts"></div>
+              </section>
+
+              <section class="audit-section">
+                <div class="section-title-row">
+                  <h4>Verified activity</h4>
+                  <button class="text-button" id="undo-action" type="button">Undo last change</button>
+                </div>
+                <ol id="audit-list"></ol>
+              </section>
+            </aside>
+          </div>
+        </section>
+
+        <section class="mode-view organizer-view" data-view="organizer" hidden>
+          <div class="organizer-layout">
+            <section class="brief-studio">
+              <div class="studio-step">
+                <span>01</span>
+                <div>
+                  <p class="eyebrow">Unstructured input</p>
+                  <h3>Turn scattered operational inputs into one official customer experience.</h3>
+                </div>
+              </div>
+              <label for="creation-brief">Emails, chats, PDFs, requirements, partner proposals, and open ideas</label>
+              <textarea id="creation-brief" rows="13" spellcheck="true"></textarea>
+              <div class="brief-meta">
+                <span id="brief-count">0 characters</span>
+                <span>Synthetic challenge data</span>
+              </div>
+              <div class="studio-actions">
+                <button class="button primary" id="copy-organizer-prompt" type="button">Copy AI creation prompt</button>
+                <button class="button secondary" id="stage-demo-draft" type="button">Stage browser-only demo draft</button>
+              </div>
+              <div class="brief-principles">
+                <div><span>Authority</span><strong>Who governs official truth?</strong></div>
+                <div><span>Integration</span><strong>What must become one journey?</strong></div>
+                <div><span>Evidence</span><strong>How is each step verified?</strong></div>
+                <div><span>Satisfaction hook</span><strong>What achievement is worth finishing and sharing?</strong></div>
+                <div><span>Sponsor hook</span><strong>Where does real need reveal intent?</strong></div>
+              </div>
+            </section>
+
+            <section class="draft-studio">
+              <div class="studio-step">
+                <span>02</span>
+                <div>
+                  <p class="eyebrow">AI-generated official experience</p>
+                  <h3>A governed integration layer that can be inspected, validated, and published.</h3>
+                </div>
+              </div>
+
+              <div class="draft-status-row">
+                <span class="draft-status" id="draft-status">No draft staged</span>
+                <div class="validation-score"><strong id="draft-score">—</strong><span>validation</span></div>
+              </div>
+
+              <div class="draft-preview" id="draft-preview">
+                <div class="empty-state">
+                  <span aria-hidden="true">✦</span>
+                  <h4>Ask ChatGPT to build the guide.</h4>
+                  <p>The agent integrates scattered inputs into one governed journey, preserves assumptions, exposes open questions, and waits for human approval.</p>
+                </div>
+              </div>
+
+              <div class="studio-actions">
+                <button class="button secondary" id="validate-draft" type="button">Validate draft</button>
+                <button class="button dark" id="publish-draft" type="button">Publish official guide</button>
+              </div>
+
+              <section class="prompt-section organizer-prompts">
+                <div class="section-title-row">
+                  <h4>Organizer conversation</h4>
+                  <span>Read → integrate → validate → publish</span>
+                </div>
+                <div class="prompt-list" id="organizer-prompts"></div>
+              </section>
+            </section>
+          </div>
+        </section>
+
+        <section class="mode-view impact-view" data-view="impact" hidden>
+          <div class="impact-hero">
+            <div>
+              <p class="eyebrow">Value inside the official experience · Synthetic challenge data</p>
+              <h3>Partners join one trusted journey.<br /><span>Customers stop assembling it.</span></h3>
+            </div>
+            <p>
+              OCHECK integrates official truth, personal progress, optional sponsored value, and shareable achievement without confusing
+              their roles. Events gain control, customers gain clarity, and partners gain relevance.
+            </p>
+          </div>
+
+          <div class="impact-metrics">
+            <article><span>Preparation ready</span><strong id="metric-readiness">0%</strong><small>verified participant outcome</small></article>
+            <article><span>Contextual interest</span><strong id="metric-sponsor-open">0%</strong><small>need-matched opens ÷ impressions</small></article>
+            <article><span>High-intent opt-in</span><strong id="metric-sponsor-activation">0%</strong><small>explicit activations ÷ opens</small></article>
+            <article><span>Achievement sharing</span><strong id="metric-referral">0%</strong><small>new clean guides ÷ shares</small></article>
+          </div>
+
+          <div class="impact-layout">
+            <section class="funnel-card">
+              <div class="section-title-row">
+                <div>
+                  <p class="eyebrow">Sponsor value inside the official journey</p>
+                  <h4>MotionLab Demo · Mobility screening</h4>
+                </div>
+                <span>Optional · Disclosed</span>
+              </div>
+              <div class="funnel">
+                <div><span>Impressions</span><i style="--width:100%"></i><strong id="impact-impressions">0</strong></div>
+                <div><span>Need-matched opens</span><i style="--width:25%"></i><strong id="impact-opens">0</strong></div>
+                <div><span>Explicit opt-ins</span><i style="--width:12.5%"></i><strong id="impact-activations">0</strong></div>
+              </div>
+              <p><strong id="impact-intent-signals">0</strong> synthetic high-intent signals come from real contextual actions. They improve audience understanding without claiming demographic or predictive certainty. Metrics are aggregated and non-identifying: partners receive no participant identity, contact data, or personal progress.</p>
+            </section>
+
+            <section class="reward-growth-card">
+              <div class="reward-orbit" aria-hidden="true">✓</div>
+              <p class="eyebrow">Satisfaction-led growth inside the official journey</p>
+              <h4>Achievement becomes trusted, organic distribution.</h4>
+              <div class="reward-stats">
+                <div><span>Ready Passes shared</span><strong id="impact-shares">0</strong></div>
+                <div><span>New clean guides started</span><strong id="impact-referrals">0</strong></div>
+              </div>
+              <p>Each recipient opens a clean guide instance; no participant progress is transferred.</p>
+            </section>
+          </div>
+
+          <div class="value-triad">
+            <article><span>For customers</span><h4>No more accidental self-integration</h4><p>One official source unifies rules, timing, assistance, partner value, verified progress, and shareable achievement.</p></article>
+            <article><span>For events</span><h4>Control the official experience</h4><p>Govern truth, approved partners, completion evidence, and achievement-powered growth through one shared journey.</p></article>
+            <article><span>For sponsors</span><h4>Join at the moment of real need</h4><p>Aggregated context and explicit opt-ins reveal genuine interest while identity, contact data, and personal progress stay private.</p></article>
+          </div>
+        </section>
+      </section>
+
+      <section class="founder-story" aria-labelledby="founder-story-title">
+        <div class="founder-age" aria-label="Founder age: 43">
+          <span>Built at</span>
+          <strong>43</strong>
+          <small>years old</small>
+        </div>
+
+        <div class="founder-copy">
+          <p class="eyebrow">Human impact · Colombia → the world</p>
+          <h2 id="founder-story-title">What if one person’s imagination could reach the execution power of a technical team?</h2>
+          <p>
+            OCHECK was founded by <strong>Gustavo García Figueroa, a Colombian lawyer with intermediate English and no
+            traditional software background.</strong> Using ChatGPT and Codex as working tools, and Vercel as deployment
+            infrastructure, he moved from a persistent real-world problem to product strategy, governance, customer experience,
+            tests, and a functioning WebMCP product with global ambition.
+          </p>
+          <blockquote>
+            “The human mind has always had limits. Until now.”
+          </blockquote>
+          <p class="founder-thesis">
+            Gustavo brought the idea, inventiveness, product judgment, and accountability. ChatGPT and Codex provided execution
+            leverage—turning language into flows, code, tests, and iteration. Technology did not replace the human mind; it
+            expanded what one determined person could build with it.
+          </p>
+        </div>
+
+        <div class="founder-proof" aria-label="Founder journey">
+          <article>
+            <span>01 · Domain judgment</span>
+            <strong>Idea, inventiveness, trust</strong>
+            <p>The founder brings the problem, vision, customer judgment, product decisions, and accountability.</p>
+          </article>
+          <article>
+            <span>02 · AI leverage</span>
+            <strong>Intent → execution power</strong>
+            <p>ChatGPT and Codex translate natural language into flows, code, tests, and rapid iteration.</p>
+          </article>
+          <article>
+            <span>03 · Global ambition</span>
+            <strong>Colombia → any outcome</strong>
+            <p>WebMCP makes the same model available wherever trusted information must become action.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="webmcp-proof">
+        <div class="proof-copy">
+          <p class="eyebrow">Deep WebMCP leverage</p>
+          <h2>The agent does not browse a fragmented journey.<br />It operates the official experience.</h2>
+          <p>
+            Read tools understand scattered intent and the organizer-governed source that integrates it. Write tools stage,
+            publish, personalize, verify, activate, recognize achievement, and undo inside that same official state through narrow schemas
+            and visible human confirmation.
+          </p>
+          <div class="proof-principles">
+            <span>Official source</span><span>Same live state</span><span>Human control</span><span>Recoverable actions</span>
+          </div>
+        </div>
+        <details class="tool-catalog">
+          <summary><strong>Inspect all 13 Site Tools</strong><span>6 read · 7 confirm + write</span></summary>
+          <div class="tool-grid" id="tool-grid"></div>
+        </details>
+      </section>
+    </main>
+
+    <footer>
+      <a class="brand inverse" href="#top" aria-label="OCHECK home"><span class="brand-mark"></span><span>CHECK</span></a>
+      <p>Challenge Edition · Synthetic data · Human-controlled action · No real purchase</p>
+      <a href="https://learn.chatgpt.com/docs/webmcp" rel="noreferrer">WebMCP documentation ↗</a>
+    </footer>
+
+    <div class="modal-backdrop" id="action-modal" hidden>
+      <section class="action-modal" role="dialog" aria-modal="true" aria-labelledby="action-title">
+        <button class="modal-close" id="action-close" type="button" aria-label="Close action">×</button>
+        <div class="modal-kicker-row">
+          <p class="eyebrow" id="action-eyebrow">Official action</p>
+          <span id="action-status">Pending</span>
+        </div>
+        <h2 id="action-title"></h2>
+        <p class="modal-lead" id="action-description"></p>
+        <dl class="evidence-card">
+          <div><dt>Verified when</dt><dd id="action-evidence"></dd></div>
+          <div><dt>Official source</dt><dd id="action-source"></dd></div>
+        </dl>
+        <div class="sponsor-offer" id="sponsor-offer" hidden>
+          <div class="sponsor-disclosure" id="sponsor-disclosure"></div>
+          <span class="sponsor-wordmark" id="sponsor-partner"></span>
+          <h3 id="sponsor-headline"></h3>
+          <p id="sponsor-value"></p>
+          <small id="sponsor-terms"></small>
+          <small class="sponsor-intent-note">In this synthetic demo, an activation becomes an aggregated, non-identifying high-intent signal. It never shares identity, contact data, personal progress, or completes an official action.</small>
+          <button class="button primary full-width" id="activate-sponsor" type="button"></button>
+        </div>
+        <div class="modal-actions">
+          <button class="button secondary" id="keep-pending" type="button">Keep pending</button>
+          <button class="button dark" id="complete-action" type="button">Verify as complete</button>
+        </div>
+      </section>
+    </div>
+
+    <div class="modal-backdrop" id="reward-modal" hidden>
+      <section class="reward-modal" role="dialog" aria-modal="true" aria-labelledby="reward-title">
+        <button class="modal-close inverse-close" id="reward-close" type="button" aria-label="Close Ready Pass">×</button>
+        <p class="eyebrow">Satisfaction hook · Verified achievement</p>
+        <div class="reward-mark" aria-hidden="true">✓</div>
+        <span class="reward-state" id="reward-state">Locked</span>
+        <h2 id="reward-title">OCHECK Ready Pass</h2>
+        <p id="reward-benefit"></p>
+        <div class="ready-pass">
+          <small>OCHECK · OFFICIAL GUIDE</small>
+          <strong id="ready-pass-title">I AM READY FOR COASTAL 5150</strong>
+          <span id="ready-pass-meta">Verified preparation · Synthetic demo</span>
+          <b id="ready-pass-code">Complete every Before action to unlock</b>
+        </div>
+        <button class="button magenta full-width" id="claim-reward" type="button">Claim Ready Pass</button>
+        <button class="button reward-secondary full-width" id="copy-ready-pass" type="button" hidden>Copy clean referral link</button>
+        <small class="reward-note">The Ready Pass is earned through verified preparation. Sharing celebrates achievement and opens a clean guide without transferring personal progress.</small>
+      </section>
+    </div>
+
+    <div class="modal-backdrop" id="confirmation-modal" hidden>
+      <section class="confirmation-modal" role="dialog" aria-modal="true" aria-labelledby="confirmation-title">
+        <p class="eyebrow" id="confirmation-eyebrow">Human confirmation</p>
+        <h2 id="confirmation-title">Confirm this action?</h2>
+        <p id="confirmation-summary"></p>
+        <details>
+          <summary>Inspect proposed data</summary>
+          <pre id="confirmation-details"></pre>
+        </details>
+        <div class="modal-actions">
+          <button class="button secondary" id="confirmation-cancel" type="button">Cancel</button>
+          <button class="button dark" id="confirmation-approve" type="button">Confirm</button>
+        </div>
+      </section>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+    <noscript>
+      <div class="noscript">OCHECK needs JavaScript to run the interactive guide and register WebMCP Site Tools.</div>
+    </noscript>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
