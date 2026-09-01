@@ -1,12 +1,23 @@
 # OCHECK — Make the Experience Official
 
-> WebMCP Challenge Edition · private development draft
+> WebMCP Challenge Edition · self-contained open-source submission build
 
 Every experience already has an integrator. Today, it is usually the customer—forced to reconcile emails, chats, PDFs, maps, deadlines, providers, partner offers, and last-minute changes.
 
 OCHECK changes who does that work. It becomes the **organizer-governed, official and sponsor-enabled integration layer**: one trusted experience where the organizer, an AI agent, a person, and authorized partners share the same outcome state. Unstructured inputs become sequenced, source-traceable action; verified completion then powers event virality and higher-intent sponsor signals.
 
 **OCHECK is not another touchpoint. It is the official integration layer between all of them.**
+
+## Live challenge build
+
+- **Application:** https://ocheck-webmcp-challenge.vercel.app/
+- **Challenge provenance:** [`HACKATHON.md`](HACKATHON.md)
+- **License:** [BSD 3-Clause](LICENSE)
+- **Trademark boundary:** [`TRADEMARKS.md`](TRADEMARKS.md)
+
+The deployed application and this repository form the complete standalone
+Challenge Edition. No login, credentials, production dataset, or private OCHECK
+service is required to run or evaluate it.
 
 ## Challenge thesis
 
@@ -99,6 +110,17 @@ The top-level page registers 13 narrow tools through document.modelContext.regis
 | claim_ready_pass | Confirm + write | Claim the Ready Pass only after the verified unlock rule is satisfied. |
 | undo_last_confirmed_action | Confirm + write | Restore the previous reversible state. |
 
+The tools are constructed as narrow descriptors and registered directly with
+the browser-native API:
+
+~~~js
+const tools = buildSiteTools({ store, confirmAction });
+
+for (const tool of tools) {
+  await document.modelContext.registerTool(tool);
+}
+~~~
+
 ## Human-control model
 
 - Read tools use readOnlyHint: true.
@@ -120,6 +142,8 @@ The built-in browser applies its own Site Tools safety review. OCHECK’s confir
 Requirements: Node.js 20 or newer.
 
 ~~~bash
+npm test
+npm run check
 npm run dev
 ~~~
 
@@ -168,9 +192,17 @@ All events, participants, organizations, partners, figures, Ready Pass codes, an
 
 ## Status and license
 
-The repository remains private while the challenge edition and intellectual-property boundary are validated. No open-source license has been selected yet. Public visibility and an approved license will be added before submission only after explicit authorization.
+This repository contains the standalone, synthetic Challenge Edition and not
+the private OCHECK production product. Its source code is licensed under the
+[BSD 3-Clause License](LICENSE), copyright © 2026 Gustavo García Figueroa.
+
+The software license does not grant rights to use the OCHECK name, marks, logo,
+or product identity. See [`TRADEMARKS.md`](TRADEMARKS.md). The distinction
+between pre-existing OCHECK work and challenge-period implementation is
+documented in [`HACKATHON.md`](HACKATHON.md).
 
 ## References
 
 - [OpenAI Site Tools documentation](https://learn.chatgpt.com/docs/webmcp)
 - [WebMCP proposed specification](https://webmachinelearning.github.io/webmcp/)
+- [WebMCP Challenge official rules](https://webmcp.devpost.com/rules)
